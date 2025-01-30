@@ -1,12 +1,14 @@
 import Layout from "./components/core/Layout";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import Home from "./routes/Home";
-import Movies from "./routes/Movies";
-import Tv from "./routes/Tv";
-import Account from "./routes/Account";
-import Error from "./routes/Error";
-import Discover from "./routes/Discover";
+import Home from "@/routes/Home";
+import Movies from "@/routes/Movies";
+import Tv from "@/routes/Tv";
+import Account from "@/routes/Account";
+import Error from "@/routes/Error";
+import Discover from "@/routes/Discover";
+
+import { ThemeProvider } from "@/components/core/ThemeProvider";
 
 function App() {
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -14,6 +16,7 @@ function App() {
 
   return (
     <>
+    <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
       <Layout>
         <Routes>
           <Route path="/" element={<Home />}></Route>
@@ -24,6 +27,7 @@ function App() {
           <Route path="/error" element={<Error />}></Route>
         </Routes>
       </Layout>
+    </ThemeProvider>
     </>
   );
 }

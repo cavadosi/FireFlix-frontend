@@ -1,10 +1,11 @@
-import { AppSidebar } from "@/components/AppSidebar";
+import { AppSidebar } from "@/components/core/sidebar/AppSidebar";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { ReactNode } from "react";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 interface LayoutProps {
   children: ReactNode;
@@ -17,8 +18,9 @@ export default function Layout({ children }: LayoutProps) {
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
+          <div className="flex items-center gap-2 px-4 justify-between w-full">
             <SidebarTrigger className="-ml-1" />
+            <ThemeSwitch />
           </div>
         </header>
         {/** Page content*/}

@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Flame, Clapperboard, MonitorPlay, Compass } from "lucide-react";
 
-import { NavMain } from "@/components/NavMain";
-import { NavUser } from "@/components/NavUser";
-import { NavHeader } from "@/components/NavHeader";
+import { NavMain } from "@/components/core/sidebar/NavMain";
+import { NavUser } from "@/components/core/sidebar/NavUser";
+import { NavHeader } from "@/components/core/sidebar/NavHeader";
 import {
   Sidebar,
   SidebarContent,
