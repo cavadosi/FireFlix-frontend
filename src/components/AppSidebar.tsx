@@ -1,10 +1,5 @@
 import * as React from "react";
-import {
-  Flame,
-  Clapperboard,
-  MonitorPlay,
-  Compass
-} from "lucide-react";
+import { Flame, Clapperboard, MonitorPlay, Compass } from "lucide-react";
 
 import { NavMain } from "@/components/NavMain";
 import { NavUser } from "@/components/NavUser";
@@ -23,63 +18,65 @@ const data = {
     name: "shadcn",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
+    accountUrl: "/account",
   },
   navHeader: {
     logo: Flame,
     name: "FireFlix",
     slogan: "Ignite Your Screen!",
+    url: "/",
   },
   navMain: [
     {
       title: "Movies",
-      url: "#",
+      url: "/movies",
       icon: Clapperboard,
       isActive: true,
       items: [
         {
           title: "Now playing",
-          url: "#",
+          url: "/movies/now-playing",
         },
         {
           title: "Popular",
-          url: "#",
+          url: "/movies/popular",
         },
         {
           title: "Top rated",
-          url: "#",
+          url: "/movies/top-rated",
         },
         {
           title: "Upcoming",
-          url: "#",
+          url: "/movies/upcoming",
         },
       ],
     },
     {
       title: "TV Shows",
-      url: "#",
+      url: "/tv",
       icon: MonitorPlay,
       items: [
         {
           title: "Airing today",
-          url: "#",
+          url: "/tv/airing-today",
         },
         {
           title: "On the air",
-          url: "#",
+          url: "/tv/on-the-air",
         },
         {
           title: "Popular",
-          url: "#",
+          url: "/tv/popular",
         },
         {
           title: "Top rated",
-          url: "#",
+          url: "/tv/top-rated",
         },
       ],
     },
     {
       title: "Discover",
-      url: "#",
+      url: "/discover",
       icon: Compass,
     },
   ],

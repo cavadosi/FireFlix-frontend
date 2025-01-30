@@ -5,7 +5,7 @@
 
 
 
-const MoviesPage = () => {
+const Movies = () => {
     return (
         <div>
             Movies Page
@@ -13,4 +13,4 @@ const MoviesPage = () => {
     )
 }
 
-export default MoviesPage
+export default Movies

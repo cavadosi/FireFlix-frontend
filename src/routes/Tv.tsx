@@ -3,7 +3,7 @@
 
 
 
-const TvPage = () => {
+const Tv = () => {
     return (
         <div>
             Tv Page
@@ -11,4 +11,4 @@ const TvPage = () => {
     )
 }
 
-export default TvPage
+export default Tv

@@ -4,7 +4,7 @@
 
 
 
-const AccountPage = () => {
+const Account = () => {
     return (
         <div>
             Account Page
@@ -12,4 +12,4 @@ const AccountPage = () => {
     )
 }
 
-export default AccountPage
+export default Account
