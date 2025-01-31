@@ -7,13 +7,11 @@ import Tv from "@/routes/Tv";
 import Account from "@/routes/Account";
 import Error from "@/routes/Error";
 import Discover from "@/routes/Discover";
+import MediaDetails from "@/routes/MediaDetails";
 
 import { ThemeProvider } from "@/components/core/ThemeProvider";
 
 function App() {
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-  console.log(apiBaseUrl);
-
   return (
     <>
     <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
@@ -25,6 +23,7 @@ function App() {
           <Route path="/account" element={<Account />}></Route>
           <Route path="/discover" element={<Discover />}></Route>
           <Route path="/error" element={<Error />}></Route>
+          <Route path="/:mediaType/:id" element={<MediaDetails />} ></Route>
         </Routes>
       </Layout>
     </ThemeProvider>
