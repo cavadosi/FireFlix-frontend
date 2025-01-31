@@ -2,6 +2,7 @@ export interface User {
   id: string;
   name: string;
   username: string;
+  sessionId: string;
 }
 
 export interface ApiResponse<T> {

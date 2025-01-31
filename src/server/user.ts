@@ -2,7 +2,7 @@ import { ApiResponse, MediaList, User } from "@/types";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-const GetRequestToken = async (): Promise<ApiResponse<string>> => {
+export const GetRequestToken = async (): Promise<ApiResponse<string>> => {
   try {
     const response = await fetch(`${baseUrl}/Account/request_token`);
     const data = await response.json();
@@ -24,7 +24,7 @@ const GetRequestToken = async (): Promise<ApiResponse<string>> => {
   }
 };
 
-const GetSessionId = async (
+export const GetSessionId = async (
   requestToken: string
 ): Promise<ApiResponse<string>> => {
   try {
@@ -50,7 +50,7 @@ const GetSessionId = async (
   }
 };
 
-const GetAccountDetails = async (
+export const GetAccountDetails = async (
   sessionId: string
 ): Promise<ApiResponse<User>> => {
   try {
@@ -74,7 +74,7 @@ const GetAccountDetails = async (
   }
 };
 
-const GetUserList = async (
+export const GetUserList = async (
   query: string,
   id: string
 ): Promise<ApiResponse<MediaList>> => {
@@ -99,7 +99,7 @@ const GetUserList = async (
   }
 };
 
-const MarkAsFavorite = async (
+export const MarkAsFavorite = async (
   mediaType: string,
   mediaId: number,
   favorite: boolean,
@@ -136,7 +136,7 @@ const MarkAsFavorite = async (
   }
 };
 
-const MarkWatchlist = async (
+export const MarkWatchlist = async (
   mediaType: string,
   mediaId: number,
   favorite: boolean,
@@ -171,13 +171,4 @@ const MarkWatchlist = async (
       error: error instanceof Error ? error.message : "Unknown error",
     };
   }
-};
-
-export default {
-  GetRequestToken,
-  GetSessionId,
-  GetAccountDetails,
-  GetUserList,
-  MarkAsFavorite,
-  MarkWatchlist,
 };
