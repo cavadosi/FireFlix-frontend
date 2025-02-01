@@ -26,7 +26,7 @@ type AuthContextProvider = {
 
 const AuthContext = createContext<AuthContextProvider | undefined>(undefined);
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
+const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(() => {
     const storedUser = localStorage.getItem("User");
     return storedUser ? JSON.parse(storedUser) : null;
@@ -42,6 +42,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     if (user) {
       localStorage.setItem("User", JSON.stringify(user));
+      fetchUserLists(user.id)
     } else {
       localStorage.removeItem("User");
     }
@@ -56,7 +57,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       const updatedLists = Object.fromEntries(
         UserListEndpoints.map(({ key }, index) => [key, responses[index]?.data || null])
       ) as UserLists;
-
+      console.log("USERLISTS", updatedLists);
       setUserLists(updatedLists);
     } catch (error) {
       console.error("Error fetching user lists:", error);
@@ -77,7 +78,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
       const requestToken = requestTokenResponse.data;
       const redirectUrl = encodeURIComponent(
-        window.location.origin + "/approved"
+        window.location.origin
       );
 
       window.location.href = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=${redirectUrl}`;
@@ -88,13 +89,16 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const GetUserBySessionId = async (requestToken: string) => {
     try {
+
       const sessionResponse = await GetSessionId(requestToken);
+      console.log(sessionResponse);
       if (sessionResponse.error || !sessionResponse.data) {
         console.error("Failed to get session ID:", sessionResponse.error);
         return;
       }
 
       const sessionId = sessionResponse.data;
+      console.log(sessionId);
       const userResponse = await GetAccountDetails(sessionId);
 
       if (userResponse.error || !userResponse.data) {
@@ -119,7 +123,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const isApproved = searchParams.get("approved") === "true";
 
     if (!requestToken) return;
-
+    console.log(isApproved);
     if (!isApproved) {
       console.warn("User denied authentication.");
       return;
@@ -139,3 +143,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     </AuthContext.Provider>
   );
 };
+
+export default AuthContext;
+export { UserProvider };

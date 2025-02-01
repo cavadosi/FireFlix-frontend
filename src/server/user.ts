@@ -5,14 +5,14 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 export const GetRequestToken = async (): Promise<ApiResponse<string>> => {
   try {
     const response = await fetch(`${baseUrl}/Account/request_token`);
-    const data = await response.json();
-
+    
     if (!response.ok) {
       return {
         status: response.status,
         error: `HTTP error! Status: ${response.status}`,
       };
     }
+    const data = await response.text();
 
     return { status: 200, data };
   } catch (error) {
@@ -31,14 +31,14 @@ export const GetSessionId = async (
     const response = await fetch(
       `${baseUrl}/Account/session/new/${requestToken}`
     );
-    const data = await response.json();
-
+    
     if (!response.ok) {
       return {
         status: response.status,
         error: `HTTP error! Status: ${response.status}`,
       };
     }
+    const data = await response.text();
 
     return { status: 200, data };
   } catch (error) {
@@ -79,7 +79,7 @@ export const GetUserList = async (
   id: string
 ): Promise<ApiResponse<MediaList>> => {
   try {
-    const response = await fetch(`${baseUrl}/Account/${query}/${id}`);
+    const response = await fetch(`${baseUrl}/Account/${id}/${query}`);
     const data = await response.json();
 
     if (!response.ok) {

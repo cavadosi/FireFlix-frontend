@@ -25,91 +25,136 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "@/components/core/UserProvider";
 
-
-export function NavUser({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-    accountUrl: string;
-  };
-}) {
+export function NavUser() {
+  const [userListsCount, setUserListsCount] = useState({
+    favorites: 0,
+    watchlist: 0,
+    rated: 0,
+  });
   const { isMobile } = useSidebar();
+  const auth = useContext(AuthContext);
+
+  const user = auth?.user;
+  const userLists = auth?.userLists;
+  const login = auth?.login;
+  const logout = auth?.logout;
+
+  useEffect(() => {
+    if (userLists) {
+      setUserListsCount({
+        favorites:
+          (userLists.favoriteMovies?.total_results || 0) +
+          (userLists.favoriteTv?.total_results || 0),
+        watchlist:
+          (userLists.watchlistMovies?.total_results || 0) +
+          (userLists.watchlistTv?.total_results || 0),
+        rated:
+          (userLists.ratedMovies?.total_results || 0) +
+          (userLists.ratedTv?.total_results || 0),
+      });
+    }
+  }, [userLists]);
 
   return (
     <SidebarMenu>
-      <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
-              </div>
-              <ChevronsUpDown className="ml-auto size-4" />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-            side={isMobile ? "bottom" : "right"}
-            align="end"
-            sideOffset={4}
-          >
-            <DropdownMenuLabel className="p-0 font-normal">
-              <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+      {user ? (
+        <SidebarMenuItem>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <SidebarMenuButton
+                size="lg"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              >
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage alt={user.name} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate text-xs">{user.username}</span>
                 </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
+                <ChevronsUpDown className="ml-auto size-4" />
+              </SidebarMenuButton>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
+              side={isMobile ? "bottom" : "right"}
+              align="end"
+              sideOffset={4}
+            >
+              <DropdownMenuLabel className="p-0 font-normal">
+                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+                  <Avatar className="h-8 w-8 rounded-lg">
+                    <AvatarImage alt={user.name} />
+                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  </Avatar>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">{user.name}</span>
+                    <span className="truncate text-xs">{user.username}</span>
+                  </div>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem asChild>
+                  <Link to="/account">
+                    <User className="text-zinc-500 fill-zinc-500" />
+                    Account
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <Heart className="text-red-500 fill-red-500" />
+                  <div className="grow">Favorites</div>
+                  <Badge variant="secondary">{userListsCount.favorites}</Badge>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Bookmark className="text-cyan-500 fill-cyan-500" />
+                  <div className="grow">Watchlist</div>
+                  <Badge variant="secondary">{userListsCount.watchlist}</Badge>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Star className="text-amber-500 fill-amber-500" />
+                  <div className="grow">Rated</div>
+                  <Badge variant="secondary">{userListsCount.rated}</Badge>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link to={user.accountUrl}>
-                  <User className="text-zinc-500 fill-zinc-500" />
-                  Account
-                </Link>
+                <SidebarMenuButton onMouseDown={logout}>
+                  <LogOut />
+                  Log out
+                </SidebarMenuButton>
               </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Heart className="text-red-500 fill-red-500" />
-                Favorites
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bookmark className="text-cyan-500 fill-cyan-500" />
-                Watchlist
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Star className="text-amber-500 fill-amber-500" />
-                Rated
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </SidebarMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </SidebarMenuItem>
+      ) : (
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            tooltip="Log In"
+            onClick={login}
+            size="lg"
+            variant="outline"
+            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+          >
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
+              <User className="size-4" />
+            </div>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate font-semibold">Log in</span>
+              <span className="truncate text-xs">Verify your client</span>
+            </div>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      )}
     </SidebarMenu>
   );
 }
