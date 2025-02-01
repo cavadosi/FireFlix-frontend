@@ -133,10 +133,12 @@ export type MovieQueries = "NowPlaying" | "Popular" | "TopRated" | "Upcoming";
 
 export type TVShowQueries = "NowPlaying" | "Popular" | "TopRated" | "Upcoming";
 
-export type AccountListMap =
-  | "favorite/movies"
-  | "favorite/tv"
-  | "rated/movies"
-  | "rated/tv"
-  | "watchlist/movies"
-  | "watchlist/tv";
+export type UserLists = {
+  ratedMovies: MediaList | null;
+  favoriteMovies: MediaList | null;
+  watchlistMovies: MediaList | null;
+  ratedTv: MediaList | null;
+  favoriteTv: MediaList | null;
+  watchlistTv: MediaList | null;
+};
+

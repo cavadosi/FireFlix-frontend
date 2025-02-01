@@ -1,16 +1,27 @@
-import { User, ApiResponse } from "@/types";
+import { User, ApiResponse, UserLists } from "@/types";
 import { createContext, useEffect, useState } from "react";
 import {
   GetRequestToken,
   GetSessionId,
   GetAccountDetails,
+  GetUserList,
 } from "@/server/user";
 import { useNavigate, useSearchParams } from "react-router-dom";
+
+const UserListEndpoints = [
+  { key: "ratedMovies", url: "rated/movies" },
+  { key: "favoriteMovies", url: "favorite/movies" },
+  { key: "watchlistMovies", url: "watchlist/movies" },
+  { key: "ratedTv", url: "rated/tv" },
+  { key: "favoriteTv", url: "favorite/tv" },
+  { key: "watchlistTv", url: "watchlist/tv" }
+];
 
 type AuthContextProvider = {
   user: User | null;
   login: () => Promise<ApiResponse<string> | void>;
   logout: () => void;
+  userLists: UserLists;
 };
 
 const AuthContext = createContext<AuthContextProvider | undefined>(undefined);
@@ -20,8 +31,13 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const storedUser = localStorage.getItem("User");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+
+  const [userLists, setUserLists] = useState<UserLists>(() =>
+    Object.fromEntries(UserListEndpoints.map(({ key }) => [key, null])) as UserLists
+  );
+
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -30,6 +46,22 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       localStorage.removeItem("User");
     }
   }, [user]);
+
+  const fetchUserLists = async (userId: string) => {
+    try {
+      const responses = await Promise.all(
+        UserListEndpoints.map(({ url }) => GetUserList(url, userId).catch(() => null))
+      );
+
+      const updatedLists = Object.fromEntries(
+        UserListEndpoints.map(({ key }, index) => [key, responses[index]?.data || null])
+      ) as UserLists;
+
+      setUserLists(updatedLists);
+    } catch (error) {
+      console.error("Error fetching user lists:", error);
+    }
+  };
 
   const login = async () => {
     try {
@@ -63,21 +95,20 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       const sessionId = sessionResponse.data;
-
       const userResponse = await GetAccountDetails(sessionId);
 
       if (userResponse.error || !userResponse.data) {
-        console.error("Failed to get session ID:", sessionResponse.error);
+        console.error("Failed to get account details:", userResponse.error);
         return;
       }
 
       const { id, name, username } = userResponse.data;
-
       const userData = { id, name, username, sessionId };
 
       setUser(userData);
-
       navigate("/");
+
+      await fetchUserLists(userData.id);
     } catch (error) {
       console.error("Error getting session ID:", error);
     }
@@ -94,18 +125,17 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
       return;
     }
 
-    GetUserBySessionId(requestToken)
+    GetUserBySessionId(requestToken);
   }, [searchParams]);
 
   const logout = () => {
-    setUser(null)
-  }
+    setUser(null);
+    setUserLists(Object.fromEntries(UserListEndpoints.map(({ key }) => [key, null])) as UserLists);
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-        {children}
+    <AuthContext.Provider value={{ user, login, logout, userLists }}>
+      {children}
     </AuthContext.Provider>
-  )
-
+  );
 };
-
