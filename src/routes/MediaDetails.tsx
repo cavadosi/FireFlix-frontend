@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import MediaService from "@/server/media";
 import type { Movie, TVShow, ApiResponse } from "@/types";
+import MediaCard from "@/components/media/MediaCard";
 
 const MediaDetails = () => {
   const { mediaType, id } = useParams<{ mediaType: string; id: string }>();
@@ -20,10 +21,11 @@ const MediaDetails = () => {
       setLoading(true);
       setError(null);
 
-      const response: ApiResponse<Movie | TVShow> = await MediaService.GetMediaById(
-        mediaType as "movie" | "tv",
-        parseInt(id)
-      );
+      const response: ApiResponse<Movie | TVShow> =
+        await MediaService.GetMediaById(
+          mediaType as "movie" | "tv",
+          parseInt(id)
+        );
 
       if (response.status === 200 && response.data) {
         console.log(response.data);
@@ -43,10 +45,15 @@ const MediaDetails = () => {
   if (!media) return <p>No media found.</p>;
 
   return (
-    <div>
-        <img src={mediaType === "movie" ? `https://image.tmdb.org/t/p/original/${(media as Movie).backdrop_path}` : `https://image.tmdb.org/t/p/original/${(media as TVShow).name}`} alt="" />
-      <h2>{mediaType === "movie" ? (media as Movie).title : (media as TVShow).name}</h2>
-      <p>{mediaType === "movie" ? (media as Movie).overview : (media as TVShow).overview}</p>
+    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4">
+      <MediaCard media={media} />
+      <MediaCard media={media} />
+      <MediaCard media={media} />
+      <MediaCard media={media} />
+      <MediaCard media={media} />
+      <MediaCard media={media} />
+      <MediaCard media={media} />
+      <MediaCard media={media} />
     </div>
   );
 };
