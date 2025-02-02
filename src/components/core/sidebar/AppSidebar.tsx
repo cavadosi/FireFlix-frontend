@@ -35,19 +35,19 @@ const data = {
       items: [
         {
           title: "Now playing",
-          url: "/movies/now-playing",
+          url: "/movies/NowPlaying",
         },
         {
           title: "Popular",
-          url: "/movies/popular",
+          url: "/movies/Popular",
         },
         {
           title: "Top rated",
-          url: "/movies/top-rated",
+          url: "/movies/TopRated",
         },
         {
           title: "Upcoming",
-          url: "/movies/upcoming",
+          url: "/movies/Upcoming",
         },
       ],
     },
@@ -58,19 +58,19 @@ const data = {
       items: [
         {
           title: "Airing today",
-          url: "/tv/airing-today",
+          url: "/tv/AiringToday",
         },
         {
           title: "On the air",
-          url: "/tv/on-the-air",
+          url: "/tv/OnTheAir",
         },
         {
           title: "Popular",
-          url: "/tv/popular",
+          url: "/tv/Popular",
         },
         {
           title: "Top rated",
-          url: "/tv/top-rated",
+          url: "/tv/TopRated",
         },
       ],
     },

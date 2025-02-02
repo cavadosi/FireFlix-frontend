@@ -29,7 +29,7 @@ export default function MediaCard({ media }: { media: Movie | TVShow }) {
         <div className="h-10  bottom-0 bg-gradient-to-b from-transparent to-card absolute z-10 w-full"></div>
       </CardHeader>
       <CardContent className="p-2 font-semibold leading-5">
-        <div>{isMovie(media) ? media.title : media.name}</div>
+        <div >{isMovie(media) ? media.title : media.name}</div>
       </CardContent>
       <CardFooter className="p-2">
         <div className="grow">

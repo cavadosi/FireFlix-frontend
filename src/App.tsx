@@ -21,11 +21,13 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />}></Route>
               <Route path="/movies" element={<Movies />}></Route>
+              <Route path="/movies/:query" element={<Movies />}></Route>
               <Route path="/tv" element={<Tv />}></Route>
+              <Route path="/tv/:query" element={<Tv />}></Route>
               <Route path="/account" element={<Account />}></Route>
               <Route path="/discover" element={<Discover />}></Route>
               <Route path="/error" element={<Error />}></Route>
-              <Route path="/:mediaType/:id" element={<MediaDetails />}></Route>
+              <Route path="/:mediaType/:id/details" element={<MediaDetails />}></Route>
             </Routes>
           </Layout>
         </ThemeProvider>
