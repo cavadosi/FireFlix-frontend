@@ -55,6 +55,9 @@ const MediaDetails = () => {
       <MediaCard media={media} />
       <MediaCard media={media} />
     </div>
+    //   <Link to={"/movie/912649/details"}>
+    //   <Button>Go to movie</Button>
+    // </Link>
   );
 };
 

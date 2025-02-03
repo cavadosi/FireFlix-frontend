@@ -61,16 +61,16 @@ const data = {
           url: "/tv/AiringToday",
         },
         {
-          title: "On the air",
-          url: "/tv/OnTheAir",
-        },
-        {
           title: "Popular",
           url: "/tv/Popular",
         },
         {
           title: "Top rated",
           url: "/tv/TopRated",
+        },
+        {
+          title: "On the air",
+          url: "/tv/OnTheAir",
         },
       ],
     },

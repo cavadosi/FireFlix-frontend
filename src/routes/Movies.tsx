@@ -1,29 +1,68 @@
-import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
-import MediaCarousel from "@/components/media/MediaCarousel";
+import { useParams } from "react-router-dom";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 import MediaCard from "@/components/media/MediaCard";
 import MediaService from "@/server/media";
-import { ApiResponse, MediaList } from "@/types";
+import type { ApiResponse, MediaList, MovieQueries } from "@/types";
+import { PageWrapper } from "@/components/core/PageWrapper";
+import { PageHeader } from "@/components/core/PageHeader";
+
+const MovieQueryDetails: Record<
+  MovieQueries,
+  { label: string; description: string }
+> = {
+  NowPlaying: {
+    label: "Now Playing",
+    description: "Movies currently playing in theaters.",
+  },
+  Popular: {
+    label: "Popular",
+    description: "Movies that are trending and widely watched.",
+  },
+  TopRated: {
+    label: "Top Rated",
+    description: "Movies with the highest ratings from audiences and critics.",
+  },
+  Upcoming: {
+    label: "Upcoming",
+    description: "Movies that are scheduled for release soon.",
+  },
+};
 
 const Movies = () => {
-  const { query } = useParams<{ query?: string }>();
-  const [activeList, setActiveList] = useState<MediaList | null>(null);
+  const { query: queryParam } = useParams<{ query?: string }>();
+  const query: MovieQueries = (queryParam as MovieQueries) || "NowPlaying";
+  const [activeQuery, setActiveQuery] = useState<MovieQueries>(query);
+  const [lists, setLists] = useState<Record<MovieQueries, MediaList | null>>({
+    NowPlaying: null,
+    Popular: null,
+    TopRated: null,
+    Upcoming: null,
+  });
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchMedia = async () => {
+    const fetchMedia = async (query: MovieQueries) => {
       setLoading(true);
       setError(null);
 
+      if (lists[query]) {
+        setLoading(false);
+        return;
+      }
+
       const response: ApiResponse<MediaList> = await MediaService.GetMediaList(
         "movie",
-        query || "NowPlaying"
+        query
       );
 
       if (response.status === 200 && response.data) {
-        setActiveList(response.data);
+        setLists((prevLists) => ({
+          ...prevLists,
+          [query]: response.data,
+        }));
       } else {
         setError(response.error || "Failed to fetch media details.");
       }
@@ -31,29 +70,62 @@ const Movies = () => {
       setLoading(false);
     };
 
-    fetchMedia();
+    fetchMedia(query);
+
+    setActiveQuery(query);
+
+    Object.keys(lists)
+      .filter((q): q is MovieQueries => q !== query)
+      .forEach((q) => fetchMedia(q));
   }, [query]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
-  if (!activeList) return <p>No media found.</p>;
 
   return (
-    <div className="grid grid-cols-1">
-      <Link to={"/movie/912649/details"}>
-        <Button>Go to movie</Button>
-      </Link>
-
-      {/* Grid container with proper width constraints */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 w-full">
-        {activeList.results.map((media) => (
-          <MediaCard key={media.id} media={media} />
-        ))}
-      </div>
-
-      {/* MediaCarousel */}
-      <MediaCarousel title="MediaCarousel" mediaList={activeList} />
-    </div>
+    <>
+      <Tabs
+        value={activeQuery}
+        className="w-full"
+        onValueChange={(value) => setActiveQuery(value as MovieQueries)}
+      >
+        <PageHeader>
+          <TabsList>
+            {Object.keys(lists).map((key) => (
+              <TabsTrigger key={key} value={key}>
+                {MovieQueryDetails[key as MovieQueries].label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </PageHeader>
+        <PageWrapper>
+          <div className="grid grid-cols-1">
+            {Object.entries(lists).map(([key, mediaList]) => (
+              <TabsContent key={key} value={key}>
+                <div className="space-y-1">
+                  <h4 className="text-sm font-medium leading-none">
+                    {MovieQueryDetails[key as MovieQueries].label}
+                  </h4>
+                  <p className="text-sm text-muted-foreground">
+                    {MovieQueryDetails[key as MovieQueries].description}
+                  </p>
+                </div>
+                <Separator className="my-4" />
+                {mediaList ? (
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 w-full">
+                    {mediaList.results.map((media) => (
+                      <MediaCard key={media.id} media={media} />
+                    ))}
+                  </div>
+                ) : (
+                  <p>No data available.</p>
+                )}
+              </TabsContent>
+            ))}
+          </div>
+        </PageWrapper>
+      </Tabs>
+    </>
   );
 };
 

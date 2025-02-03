@@ -131,7 +131,7 @@ export interface Credits {
 
 export type MovieQueries = "NowPlaying" | "Popular" | "TopRated" | "Upcoming";
 
-export type TVShowQueries = "NowPlaying" | "Popular" | "TopRated" | "Upcoming";
+export type TVShowQueries = "AiringToday" | "Popular" | "TopRated" | "OnTheAir";
 
 export type UserLists = {
   ratedMovies: MediaList | null;
@@ -141,4 +141,3 @@ export type UserLists = {
   favoriteTv: MediaList | null;
   watchlistTv: MediaList | null;
 };
-
