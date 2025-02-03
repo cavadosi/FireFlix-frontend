@@ -8,8 +8,6 @@ import { ApiResponse, MediaList } from "@/types";
 
 const Movies = () => {
   const { query } = useParams<{ query?: string }>();
-  console.log(query);
-
   const [activeList, setActiveList] = useState<MediaList | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,7 +46,7 @@ const Movies = () => {
 
       {/* Grid container with proper width constraints */}
       <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 w-full">
-        {activeList.results.slice(0, 8).map((media) => (
+        {activeList.results.map((media) => (
           <MediaCard key={media.id} media={media} />
         ))}
       </div>
