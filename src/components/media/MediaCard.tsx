@@ -9,12 +9,17 @@ import {
 import { Bookmark, Heart, Star } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
+import { isMovie } from "@/lib/utils";
 
 export default function MediaCard({ media }: { media: Movie | TVShow }) {
-  const isMovie = (media: Movie | TVShow): media is Movie => "title" in media;
-
   return (
-    <Link to={isMovie(media) ? `/movie/${media.id}/details` : `/tv/${media.id}/details`}>
+    <Link
+      to={
+        isMovie(media)
+          ? `/movie/${media.id}/details`
+          : `/tv/${media.id}/details`
+      }
+    >
       <Card className="!p-0 col-span-1 group hover:-translate-y-1.5 cursor-pointer transition-all duration-300 flex flex-col h-full">
         <CardHeader className="!p-0 relative">
           <img
