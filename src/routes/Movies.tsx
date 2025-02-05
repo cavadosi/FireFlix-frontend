@@ -7,6 +7,7 @@ import MediaService from "@/server/media";
 import type { ApiResponse, MediaList, MovieQueries } from "@/types";
 import { PageWrapper } from "@/components/core/PageWrapper";
 import { PageHeader } from "@/components/core/PageHeader";
+import { SkeletonMediaCard } from "@/components/media/SkeletonMediaCard";
 
 const MovieQueryDetails: Record<
   MovieQueries,
@@ -79,9 +80,6 @@ const Movies = () => {
       .forEach((q) => fetchMedia(q));
   }, [query]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
   return (
     <>
       <Tabs
@@ -118,7 +116,11 @@ const Movies = () => {
                     ))}
                   </div>
                 ) : (
-                  <p>No data available.</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 w-full">
+                    {Array.from({ length: 20 }).map((_, index) => (
+                      <SkeletonMediaCard key={index} />
+                    ))}
+                  </div>
                 )}
               </TabsContent>
             ))}

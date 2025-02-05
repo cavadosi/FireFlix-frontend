@@ -89,6 +89,7 @@ const MediaDetails = () => {
   }, [mediaType, id]);
 
   console.log(media);
+  console.log(similar? similar.results[3] : null);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!media) return <p>No media found.</p>;
@@ -194,10 +195,10 @@ const MediaDetails = () => {
       <div className="grid grid-cols-1  z-10 bg-background">
         <PageWrapper>
           <div className="col-span-1 max-w-full mx-auto overflow-hidden px-4">
-            {similar && <MediaCarousel title="Similar" mediaList={similar} />}
             {recomended && (
               <MediaCarousel title="Recomended" mediaList={recomended} />
             )}
+            {similar && <MediaCarousel title="Similar" mediaList={similar} />}
           </div>
         </PageWrapper>
       </div>
