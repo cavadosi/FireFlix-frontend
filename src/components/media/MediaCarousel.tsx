@@ -6,6 +6,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Separator } from "@/components/ui/separator";
 import MediaCard from "./MediaCard";
 
 export default function MediaCarousel({
@@ -17,9 +18,10 @@ export default function MediaCarousel({
 }) {
   return (
     <div className="flex flex-col px-10">
-      <h2 className="text-xl font-bold mb-4">{title}</h2>
-      <Carousel className="">
-        <CarouselContent className="py-10">
+      <h2 className="text-xl font-bold ">{title}</h2>
+      <Separator />
+      <Carousel className="mt-2">
+        <CarouselContent className="py-2">
           {mediaList.results.map((media) => (
             <CarouselItem key={media.id} className="basis-1/2 md:basis-1/4 lg:basis-1/8">
                 <MediaCard media={media} />
