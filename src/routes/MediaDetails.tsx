@@ -10,6 +10,7 @@ import MediaCarousel from "@/components/media/MediaCarousel";
 import { MediaAditionalInfo } from "@/components/media/MediaAditionalInfo";
 import { isMovie } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import VideoModal from "@/components/core/VideoModal";
 
 const MediaDetails = () => {
   const { mediaType, id } = useParams<{ mediaType: string; id: string }>();
@@ -89,7 +90,6 @@ const MediaDetails = () => {
   }, [mediaType, id]);
 
   console.log(media);
-  console.log(similar? similar.results[3] : null);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!media) return <p>No media found.</p>;
@@ -170,6 +170,16 @@ const MediaDetails = () => {
             ))}
           </div>
           <div className="flex items-center gap-x-2 pt-2">
+            {media.trailer && (
+              <VideoModal
+                video={media.trailer}
+                label={
+                  isMovie(media)
+                    ? (media as Movie).title ?? "Video"
+                    : (media as TVShow).name ?? "Video"
+                }
+              />
+            )}
             <Button variant="outline" className="rounded-full gap-1.5 text-xs">
               <Star className="size-md text-amber-500" />
               {media.vote_average}
@@ -188,7 +198,7 @@ const MediaDetails = () => {
             >
               <Bookmark className="size-md text-cyan-500 group-hover/watchlist:fill-cyan-500" />
             </Button>
-            <MediaAditionalInfo media={media}/>
+            <MediaAditionalInfo media={media} />
           </div>
         </div>
       </div>
