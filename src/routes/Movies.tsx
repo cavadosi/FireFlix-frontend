@@ -41,16 +41,13 @@ const Movies = () => {
     TopRated: null,
     Upcoming: null,
   });
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  // const [loading, setLoading] = useState<boolean>(true);
+  // const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchMedia = async (query: MovieQueries) => {
-      setLoading(true);
-      setError(null);
 
       if (lists[query]) {
-        setLoading(false);
         return;
       }
 
@@ -64,11 +61,8 @@ const Movies = () => {
           ...prevLists,
           [query]: response.data,
         }));
-      } else {
-        setError(response.error || "Failed to fetch media details.");
-      }
+      } 
 
-      setLoading(false);
     };
 
     fetchMedia(query);

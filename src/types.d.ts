@@ -21,7 +21,7 @@ export interface Movie {
   vote_count: number;
   release_date?: string | null;
   popularity?: number | null;
-  trailerLink?: boolean | null;
+  trailer: Video | null;
   isAdult?: boolean | null;
   budget?: number | null;
   revenue?: number | null;
@@ -51,6 +51,7 @@ interface TVShow {
   original_language?: string | null;
   original_name?: string | null;
   name?: string | null;
+  trailer: Video | null;
   overview?: string | null;
   popularity: number;
   vote_average: number;
