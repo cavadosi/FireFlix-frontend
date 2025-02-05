@@ -7,6 +7,7 @@ import { Star, Heart, Bookmark } from "lucide-react";
 import { PageWrapper } from "@/components/core/PageWrapper";
 import { PageHeader } from "@/components/core/PageHeader";
 import MediaCarousel from "@/components/media/MediaCarousel";
+import { MediaAditionalInfo } from "@/components/media/MediaAditionalInfo";
 import { isMovie } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
@@ -88,7 +89,6 @@ const MediaDetails = () => {
   }, [mediaType, id]);
 
   console.log(media);
-  console.log(similar);
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!media) return <p>No media found.</p>;
@@ -143,13 +143,16 @@ const MediaDetails = () => {
             className=" bg-contain  h-auto w-48 lg:w-56 rounded-lg"
           />
         </div>
-        <div className="flex flex-col text-start basis-3/5 mx-4 space-y-2">
+        <div className="flex flex-col text-start basis-3/5 mx-6 md:mx-4 space-y-2">
           <div className="flex ">
             <div className=" font-bold text-xl text-wrap grow">
               {isMovie(media) ? (media as Movie).title : (media as TVShow).name}
             </div>
           </div>
-          <div className=" text-secondary-foreground text-pretty">
+          <div className=" text-sm text-pretty italic text-secondary-foreground">
+            {isMovie(media) ? (media as Movie).tagline : null}
+          </div>
+          <div className="text-secondary-foreground text-pretty pr-0 md:pr-8">
             {isMovie(media)
               ? (media as Movie).overview
               : (media as TVShow).overview}
@@ -162,7 +165,6 @@ const MediaDetails = () => {
                 className="flex items-center gap-4"
               >
                 {genre.name}
-                {/* <Separator orientation="vertical" className="h-5" /> */}
               </Badge>
             ))}
           </div>
@@ -185,6 +187,7 @@ const MediaDetails = () => {
             >
               <Bookmark className="size-md text-cyan-500 group-hover/watchlist:fill-cyan-500" />
             </Button>
+            <MediaAditionalInfo media={media}/>
           </div>
         </div>
       </div>
