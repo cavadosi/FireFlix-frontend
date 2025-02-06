@@ -17,14 +17,18 @@ export default function MediaCarousel({
   title: string;
 }) {
   return (
-    <div className="flex flex-col px-10">
-      <h2 className="text-xl font-bold ">{title}</h2>
+    <div className="flex flex-col">
       <Separator />
-      <Carousel className="mt-2">
+      <h2 className="text-xl font-bold pl-6 bg-sidebar">{title}</h2>
+      <Separator />
+      <Carousel className="py-2">
         <CarouselContent className="py-2">
           {mediaList.results.map((media) => (
-            <CarouselItem key={media.id} className="basis-1/2 md:basis-1/4 lg:basis-1/8">
-                <MediaCard media={media} />
+            <CarouselItem
+            key={media.id}
+            className=" basis-5/12 sm:basis-3/12 md:basis-[23.00%] lg:basis-1/6"
+            >
+              <MediaCard media={media} />
             </CarouselItem>
           ))}
         </CarouselContent>

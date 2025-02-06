@@ -26,7 +26,7 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
           <Info className="size-md" />
         </Button>
       </SheetTrigger>
-      <SheetContent>
+      <SheetContent className="overflow-y-auto max-h-screen max-w-80">
         <SheetHeader>
           <SheetTitle>
             {isMovie(media) ? media.original_title : media.original_name}
@@ -35,6 +35,8 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
 
           <SheetDescription>
             <div className="flex-col space-y-2">
+              <p>{media.overview}</p>
+              <Separator />
               {isMovie(media) ? (
                 <>
                   <InfoRow
@@ -138,14 +140,14 @@ function InfoRow({
   if (!value) return null;
 
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between gap-x-2">
       <span className="font-bold">{label}:</span>
       {isLink ? (
         <a
           href={value as string}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-500 hover:underline"
+          className="text-blue-500 hover:underline w-full truncate"
         >
           {value}
         </a>

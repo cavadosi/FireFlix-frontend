@@ -4,7 +4,6 @@ import MediaService from "@/server/media";
 import type { Movie, TVShow, ApiResponse, MediaList } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Star, Heart, Bookmark } from "lucide-react";
-import { PageWrapper } from "@/components/core/PageWrapper";
 import { PageHeader } from "@/components/core/PageHeader";
 import MediaCarousel from "@/components/media/MediaCarousel";
 import { MediaAditionalInfo } from "@/components/media/MediaAditionalInfo";
@@ -12,6 +11,8 @@ import { isMovie } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import CastCarousel from "@/components/core/CastCarousel";
 import VideoModal from "@/components/core/VideoModal";
+import { Separator } from "@/components/ui/separator";
+
 
 const MediaDetails = () => {
   const { mediaType, id } = useParams<{ mediaType: string; id: string }>();
@@ -154,7 +155,7 @@ const MediaDetails = () => {
           <div className=" text-sm text-pretty italic text-secondary-foreground">
             {isMovie(media) ? (media as Movie).tagline : null}
           </div>
-          <div className="text-secondary-foreground text-pretty pr-0 md:pr-8">
+          <div className="text-secondary-foreground line-clamp-4 text-pretty pr-0 md:pr-8">
             {isMovie(media)
               ? (media as Movie).overview
               : (media as TVShow).overview}
@@ -204,15 +205,14 @@ const MediaDetails = () => {
         </div>
       </div>
       <div className="grid grid-cols-1  z-10 bg-background">
-        <PageWrapper>
-          <div className="col-span-1 max-w-full mx-auto overflow-hidden px-4">
-            {recomended && (
-              <MediaCarousel title="Recomended" mediaList={recomended} />
-            )}
-            {similar && <MediaCarousel title="Similar" mediaList={similar} />}
-          </div>
-        </PageWrapper>
-        {media.cast && <CastCarousel cast={media.cast} />}
+        <div className="col-span-1 max-w-full mx-auto overflow-hidden my-8">
+          {media.cast && <CastCarousel cast={media.cast} />}
+          {recomended && (
+            <MediaCarousel title="Recomended" mediaList={recomended} />
+          )}
+          {similar && <MediaCarousel title="Similar" mediaList={similar} />}
+          <Separator />
+        </div>
       </div>
     </>
   );
