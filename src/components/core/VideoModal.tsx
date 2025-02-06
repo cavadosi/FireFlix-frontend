@@ -18,9 +18,8 @@ export default function VideoModal({
 }) {
   const videoUrl =
     video.site === "YouTube"
-      ? `https://www.youtube.com/embed/${video.id}?rel=0`
-      : `https://vimeo.com/${video.id}`;
-
+      ? `https://www.youtube.com/embed/${video.key}?rel=0`
+      : `https://vimeo.com/${video.key}`;
   console.log(videoUrl);
   return (
     <Dialog>
@@ -39,7 +38,8 @@ export default function VideoModal({
             src={videoUrl}
             allowFullScreen
             className="absolute top-0 left-0 w-full h-full"
-          />
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          ></ iframe>
         </div>
       </DialogContent>
     </Dialog>
