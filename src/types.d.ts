@@ -122,7 +122,6 @@ export interface People {
   name: string;
   character?: string | null;
   cast_id?: string | null;
-  profile_path?: string | null;
 }
 
 export interface Credits {
