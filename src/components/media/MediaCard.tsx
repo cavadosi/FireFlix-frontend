@@ -31,7 +31,7 @@ export default function MediaCard({ media }: { media: Movie | TVShow }) {
     >
       <Card className="!p-0 col-span-1 group hover:-translate-y-1.5 cursor-pointer transition-all duration-300 flex flex-col h-full">
         <CardHeader className="!p-0 relative">
-          {/* Skeleton with fixed aspect ratio */}
+
           {!imageLoaded && (
             <Skeleton className="w-full aspect-[2/3]  object-cover" />
           )}
