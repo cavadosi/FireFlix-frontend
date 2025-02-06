@@ -8,6 +8,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import CompanyCard from "../core/CompanyCard";
 import { Info } from "lucide-react";
 import { Movie, TVShow } from "@/types";
 import { isMovie } from "@/lib/utils";
@@ -32,8 +33,8 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
           </SheetTitle>
           <Separator />
 
-          <SheetDescription className="flex-col space-y-4">
-            <div className="space-y-2">
+          <SheetDescription>
+            <div className="flex-col space-y-2">
               {isMovie(media) ? (
                 <>
                   <InfoRow
@@ -79,9 +80,23 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
                 <>
                   <InfoRow
                     label="First Air Date"
-                    value={media.first_air_date ? format(new Date(media.first_air_date), "MMMM dd, yyyy") : "N/A"}
+                    value={
+                      media.first_air_date
+                        ? format(
+                            new Date(media.first_air_date),
+                            "MMMM dd, yyyy"
+                          )
+                        : "N/A"
+                    }
                   />
-                  <InfoRow label="Last Air Date" value={media.last_air_date ? format(new Date(media.last_air_date), "MMMM dd, yyyy") : "N/A"} />
+                  <InfoRow
+                    label="Last Air Date"
+                    value={
+                      media.last_air_date
+                        ? format(new Date(media.last_air_date), "MMMM dd, yyyy")
+                        : "N/A"
+                    }
+                  />
                   <InfoRow label="Popularity" value={media.popularity} />
                   <InfoRow
                     label="Origin Country"
@@ -96,6 +111,13 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
                   <InfoRow label="Status" value={media.status} />
                 </>
               )}
+              <Separator />
+
+              <div className="flex flex-wrap">
+                {media.production_companies?.map((el) => (
+                  <CompanyCard company={el} key={el.id} />
+                ))}
+              </div>
             </div>
           </SheetDescription>
         </SheetHeader>
