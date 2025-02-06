@@ -10,7 +10,6 @@ import MediaCarousel from "@/components/media/MediaCarousel";
 import { MediaAditionalInfo } from "@/components/media/MediaAditionalInfo";
 import { isMovie } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import CastCarousel from "@/components/core/CastCarousel";
 import VideoModal from "@/components/core/VideoModal";
 
 const MediaDetails = () => {
@@ -212,7 +211,6 @@ const MediaDetails = () => {
             {similar && <MediaCarousel title="Similar" mediaList={similar} />}
           </div>
         </PageWrapper>
-        {media.cast && <CastCarousel cast={media.cast} />}
       </div>
     </>
   );
