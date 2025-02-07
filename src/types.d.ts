@@ -38,6 +38,7 @@ export interface Movie {
   videos?: VideoResults | null;
   cast?: People[] | null;
   credits?: Credits | null;
+  watchProviders?: WatchProviders | null; 
 }
 
 interface TVShow {
@@ -67,6 +68,7 @@ interface TVShow {
   videos?: VideoResults | null;
   cast?: People[] | null;
   credits?: Credits | null;
+  watchProviders?: WatchProviders | null; 
 }
 
 export interface MediaList {
@@ -128,6 +130,30 @@ export interface People {
 export interface Credits {
   cast: People[] | null;
 }
+
+export interface WatchProvider {
+  id: number;
+  provider_name: string;
+  provider_id: string;
+  logo_path: string | null;
+  provider_url: string | null;
+  [key: string] // This allows indexing with any string key
+
+}
+
+export interface WatchProviders {
+  results: Record<string, WatchProvider>;
+}
+
+// export interface WatchProviderInfo {
+//   display_priority: number;
+//   logo_path: string | null;
+//   provider_id: string;
+//   provider_name: string;
+//   provider_url: string | null;
+//   [key: string] // This allows indexing with any string key
+// }
+
 
 // MediaQueryList
 

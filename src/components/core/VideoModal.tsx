@@ -20,7 +20,6 @@ export default function VideoModal({
     video.site === "YouTube"
       ? `https://www.youtube.com/embed/${video.key}?rel=0`
       : `https://vimeo.com/${video.key}`;
-  console.log(videoUrl);
   return (
     <Dialog>
       <DialogTrigger asChild>

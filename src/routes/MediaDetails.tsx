@@ -12,10 +12,12 @@ import { Badge } from "@/components/ui/badge";
 import CastCarousel from "@/components/core/CastCarousel";
 import VideoModal from "@/components/core/VideoModal";
 import { Separator } from "@/components/ui/separator";
+import { useUserRegion } from "@/hooks/useUserRegion";
 
 
 const MediaDetails = () => {
   const { mediaType, id } = useParams<{ mediaType: string; id: string }>();
+  const { region } = useUserRegion()
   const [media, setMedia] = useState<Movie | TVShow | null>(null);
   const [similar, setSimilar] = useState<MediaList | null>(null);
   const [recomended, setRecomended] = useState<MediaList | null>(null);
@@ -29,6 +31,11 @@ const MediaDetails = () => {
       return;
     }
 
+    if (!region) {
+      setLoading(false);
+      return;
+    }
+    
     const fetchMedia = async () => {
       setLoading(true);
       setError(null);
@@ -36,7 +43,8 @@ const MediaDetails = () => {
       const response: ApiResponse<Movie | TVShow> =
         await MediaService.GetMediaById(
           mediaType as "movie" | "tv",
-          parseInt(id)
+          parseInt(id),
+          region
         );
 
       if (response.status === 200 && response.data) {
@@ -89,9 +97,11 @@ const MediaDetails = () => {
     fetchMedia();
     fetchSimilar();
     fetchRecomended();
-  }, [mediaType, id]);
+  }, [mediaType, id, region]);
 
-  console.log(media);
+  console.log(region);
+  console.log(media?.watchProviders);
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!media) return <p>No media found.</p>;
