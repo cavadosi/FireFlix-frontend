@@ -99,9 +99,6 @@ const MediaDetails = () => {
     fetchRecomended();
   }, [mediaType, id, region]);
 
-  console.log(region);
-  console.log(media?.watchProviders);
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
   if (!media) return <p>No media found.</p>;
@@ -214,7 +211,7 @@ const MediaDetails = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1  z-10 bg-background">
+      <div className="grid grid-cols-1  z-10 bg-background -mt-0.5">
         <div className="col-span-1 max-w-full mx-auto overflow-hidden my-8">
           {media.cast && <CastCarousel cast={media.cast} />}
           {recomended && (

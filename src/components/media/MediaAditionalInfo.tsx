@@ -16,14 +16,13 @@ import { isMovie } from "@/lib/utils";
 import { format } from "date-fns";
 
 export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
-
   const providersKey = media.watchProviders?.results
-  ? Object.keys(media.watchProviders.results)[0]
-  : null;
+    ? Object.keys(media.watchProviders.results)[0]
+    : null;
   const providers = providersKey
     ? media.watchProviders?.results[providersKey]
     : null;
-  
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -115,7 +114,10 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
                   {Object.keys(providers).map((category, key) => {
                     const categoryProviders = providers[category];
                     return categoryProviders && categoryProviders.length > 0 ? (
-                      <div key={key} className="my-4 rounded-md bg-secondary p-2">
+                      <div
+                        key={key}
+                        className="my-4 rounded-md bg-secondary p-2"
+                      >
                         <h2 className="text-start text-lg font-semibold capitalize mb-4">
                           {category}
                         </h2>
@@ -131,14 +133,21 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
                   })}
                 </div>
               )}
+              <div>
 
               <Separator />
-              <div className="flex flex-wrap">
-                {media.production_companies?.map((el) => (
-                  <CompanyCard company={el} key={el.id} />
-                ))}
+              <div className="my-4 rounded-md bg-secondary">
+                <h2 className="text-start text-lg font-semibold capitalize pt-2 px-2">
+                  Produced by
+                </h2>
+                <div className=" flex flex-wrap">
+                  {media.production_companies?.map((el) => (
+                    <CompanyCard company={el} key={el.id} />
+                  ))}
+                </div>
               </div>
             </div>
+              </div>
           </SheetDescription>
         </SheetHeader>
       </SheetContent>
