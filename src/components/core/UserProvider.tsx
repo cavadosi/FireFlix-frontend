@@ -57,7 +57,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       const updatedLists = Object.fromEntries(
         UserListEndpoints.map(({ key }, index) => [key, responses[index]?.data || null])
       ) as UserLists;
-      console.log("USERLISTS", updatedLists);
       setUserLists(updatedLists);
     } catch (error) {
       console.error("Error fetching user lists:", error);
@@ -91,14 +90,12 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     try {
 
       const sessionResponse = await GetSessionId(requestToken);
-      console.log(sessionResponse);
       if (sessionResponse.error || !sessionResponse.data) {
         console.error("Failed to get session ID:", sessionResponse.error);
         return;
       }
 
       const sessionId = sessionResponse.data;
-      console.log(sessionId);
       const userResponse = await GetAccountDetails(sessionId);
 
       if (userResponse.error || !userResponse.data) {
@@ -123,7 +120,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const isApproved = searchParams.get("approved") === "true";
 
     if (!requestToken) return;
-    console.log(isApproved);
     if (!isApproved) {
       console.warn("User denied authentication.");
       return;

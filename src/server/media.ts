@@ -16,6 +16,11 @@ const fetchMediaData = async <T>(
     const response = await fetch(url);
     const data = await response.json();
 
+    if (data && data['watch/providers']) {
+      data.watchProviders = data['watch/providers'];
+      delete data['watch/providers'];
+    }
+
     if (!response.ok) {
       return {
         status: response.status,
@@ -35,10 +40,11 @@ const fetchMediaData = async <T>(
 
 const GetMediaById = async (
   mediaType: 'movie' | 'tv',
-  id: number
+  id: number,
+  region?: string
 ): Promise<ApiResponse<Movie | TVShow>> => {
   const apiBaseUrl = getApiBaseUrl(mediaType);
-  return await fetchMediaData(`${apiBaseUrl}/${id}`);
+  return await fetchMediaData(`${apiBaseUrl}/${id}/details?region=${region}`);
 };
 
 const GetRecomendedMedia = async (

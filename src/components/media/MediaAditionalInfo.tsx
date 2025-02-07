@@ -8,13 +8,22 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
-import CompanyCard from "../core/CompanyCard";
+import CompanyCard from "@/components/core/CompanyCard";
+import ProviderCard from "@/components/core/ProviderCard";
 import { Info } from "lucide-react";
-import { Movie, TVShow } from "@/types";
+import { Movie, TVShow, WatchProvider } from "@/types";
 import { isMovie } from "@/lib/utils";
 import { format } from "date-fns";
 
 export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
+
+  const providersKey = media.watchProviders?.results
+  ? Object.keys(media.watchProviders.results)[0]
+  : null;
+  const providers = providersKey
+    ? media.watchProviders?.results[providersKey]
+    : null;
+  
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -51,7 +60,6 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
                     label="Runtime"
                     value={media.runtime ? `${media.runtime} min` : "N/A"}
                   />
-
                   <InfoRow label="Popularity" value={media.popularity} />
                   <InfoRow
                     label="Budget"
@@ -71,12 +79,6 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
                     label="Original Language"
                     value={media.original_language}
                   />
-                  <InfoRow
-                    label="Adult Content"
-                    value={media.isAdult ? "Yes" : "No"}
-                  />
-                  <InfoRow label="Status" value={media.status} />
-                  <InfoRow label="Homepage" value={media.homepage} isLink />
                 </>
               ) : (
                 <>
@@ -104,17 +106,33 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
                     label="Origin Country"
                     value={media.origin_country?.join(", ")}
                   />
-                  <InfoRow
-                    label="Original Language"
-                    value={media.original_language}
-                  />
-                  <InfoRow label="Episodes" value={media.number_of_episodes} />
-                  <InfoRow label="Seasons" value={media.number_of_seasons} />
-                  <InfoRow label="Status" value={media.status} />
                 </>
               )}
-              <Separator />
 
+              {providers && (
+                <div>
+                  <Separator />
+                  {Object.keys(providers).map((category, key) => {
+                    const categoryProviders = providers[category];
+                    return categoryProviders && categoryProviders.length > 0 ? (
+                      <div key={key} className="my-4 rounded-md bg-secondary p-2">
+                        <h2 className="text-start text-lg font-semibold capitalize mb-4">
+                          {category}
+                        </h2>
+                        <div className="flex flex-wrap gap-y-2">
+                          {categoryProviders.map(
+                            (provider: WatchProvider, key: number) => (
+                              <ProviderCard key={key} provider={provider} />
+                            )
+                          )}
+                        </div>
+                      </div>
+                    ) : null;
+                  })}
+                </div>
+              )}
+
+              <Separator />
               <div className="flex flex-wrap">
                 {media.production_companies?.map((el) => (
                   <CompanyCard company={el} key={el.id} />
