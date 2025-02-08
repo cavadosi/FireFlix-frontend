@@ -6,10 +6,10 @@ export const useUserRegion = () => {
   useEffect(() => {
     const getRegionCode = async () => {
       try {
-        const response = await fetch("https://ip-api.com/json/");
+        const response = await fetch("https://ipapi.co/json/");
         const data = await response.json();
-        
-        return data.countryCode || null;
+
+        return data.country_code || null;
       } catch (error) {
         console.error("Error fetching region code:", error);
         return null;

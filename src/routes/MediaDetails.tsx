@@ -14,10 +14,9 @@ import VideoModal from "@/components/core/VideoModal";
 import { Separator } from "@/components/ui/separator";
 import { useUserRegion } from "@/hooks/useUserRegion";
 
-
 const MediaDetails = () => {
   const { mediaType, id } = useParams<{ mediaType: string; id: string }>();
-  const { region } = useUserRegion()
+  const { region } = useUserRegion();
   const [media, setMedia] = useState<Movie | TVShow | null>(null);
   const [similar, setSimilar] = useState<MediaList | null>(null);
   const [recomended, setRecomended] = useState<MediaList | null>(null);
@@ -30,23 +29,22 @@ const MediaDetails = () => {
       setLoading(false);
       return;
     }
+    console.log(region);
 
-    if (!region) {
-      setLoading(false);
-      return;
-    }
-    
     const fetchMedia = async () => {
       setLoading(true);
       setError(null);
 
-      const response: ApiResponse<Movie | TVShow> =
-        await MediaService.GetMediaById(
-          mediaType as "movie" | "tv",
-          parseInt(id),
-          region
-        );
-
+      const response: ApiResponse<Movie | TVShow> = region
+        ? await MediaService.GetMediaById(
+            mediaType as "movie" | "tv",
+            parseInt(id),
+            region
+          )
+        : await MediaService.GetMediaById(
+            mediaType as "movie" | "tv",
+            parseInt(id),
+          );
       if (response.status === 200 && response.data) {
         setMedia(response.data);
       } else {
