@@ -8,6 +8,7 @@ import type { ApiResponse, MediaList, MovieQueries } from "@/types";
 import { PageWrapper } from "@/components/core/PageWrapper";
 import { PageHeader } from "@/components/core/PageHeader";
 import { SkeletonMediaCard } from "@/components/media/SkeletonMediaCard";
+import { Button } from "@/components/ui/button";
 
 const MovieQueryDetails: Record<
   MovieQueries,
@@ -34,6 +35,7 @@ const MovieQueryDetails: Record<
 const Movies = () => {
   const { query: queryParam } = useParams<{ query?: string }>();
   const query: MovieQueries = (queryParam as MovieQueries) || "NowPlaying";
+
   const [activeQuery, setActiveQuery] = useState<MovieQueries>(query);
   const [lists, setLists] = useState<Record<MovieQueries, MediaList | null>>({
     NowPlaying: null,
@@ -41,38 +43,84 @@ const Movies = () => {
     TopRated: null,
     Upcoming: null,
   });
-  // const [loading, setLoading] = useState<boolean>(true);
-  // const [error, setError] = useState<string | null>(null);
+
+  const [isLoadingMore, setIsLoadingMore] = useState<
+    Record<MovieQueries, boolean>
+  >({
+    NowPlaying: false,
+    Popular: false,
+    TopRated: false,
+    Upcoming: false,
+  });
 
   useEffect(() => {
-    const fetchMedia = async (query: MovieQueries) => {
-
-      if (lists[query]) {
-        return;
-      }
+    const fetchMedia = async (query: MovieQueries, page: number = 1) => {
+      if (lists[query] && page === 1) return;
 
       const response: ApiResponse<MediaList> = await MediaService.GetMediaList(
         "movie",
-        query
+        query,
+        page
       );
 
-      if (response.status === 200 && response.data) {
+      if (response.status === 200 && response.data?.results) {
         setLists((prevLists) => ({
           ...prevLists,
-          [query]: response.data,
+          [query]:
+            page === 1
+              ? response.data
+              : {
+                  ...response.data,
+                  results: [
+                    ...(prevLists[query]?.results || []),
+                    ...(response.data?.results || []),
+                  ],
+                },
         }));
-      } 
-
+      }
     };
-
+    console.log(query);
     fetchMedia(query);
-
     setActiveQuery(query);
 
     Object.keys(lists)
       .filter((q): q is MovieQueries => q !== query)
       .forEach((q) => fetchMedia(q));
   }, [query]);
+
+  const loadMoreMovies = async () => {
+    try {
+      const currentList = lists[activeQuery];
+      if (!currentList || currentList.page >= currentList.total_pages) return;
+
+      setIsLoadingMore((prev) => ({ ...prev, [activeQuery]: true }));
+
+      const response: ApiResponse<MediaList> = await MediaService.GetMediaList(
+        "movie",
+        activeQuery,
+        currentList.page + 1
+      );
+
+      if (response.status === 200 && response.data?.results) {
+        setLists((prevLists) => ({
+          ...prevLists,
+          [activeQuery]: {
+            ...response.data,
+            results: [
+              ...(currentList?.results || []),
+              ...(response.data?.results || []),
+            ],
+          },
+        }));
+      }
+    } catch (error) {
+      console.error("Error loading more movies:", error);
+    } finally {
+      setIsLoadingMore((prev) => ({ ...prev, [activeQuery]: false }));
+    }
+  };
+  // console.log(activeQuery);
+  // console.log(lists);
 
   return (
     <>
@@ -104,11 +152,25 @@ const Movies = () => {
                 </div>
                 <Separator className="my-4" />
                 {mediaList ? (
-                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 w-full">
-                    {mediaList.results.map((media) => (
-                      <MediaCard key={media.id} media={media} />
-                    ))}
-                  </div>
+                  <>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 w-full">
+                      {mediaList.results.map((media, key) => (
+                        <MediaCard key={key} media={media} />
+                      ))}
+                    </div>
+                    {mediaList.page < mediaList.total_pages && (
+                      <div className="flex justify-center mt-4">
+                        <Button
+                          onClick={loadMoreMovies}
+                          disabled={isLoadingMore[activeQuery]}
+                        >
+                          {isLoadingMore[activeQuery]
+                            ? "Loading..."
+                            : "Load More"}
+                        </Button>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 w-full">
                     {Array.from({ length: 20 }).map((_, index) => (

@@ -6,12 +6,13 @@ export const useUserRegion = () => {
   useEffect(() => {
     const getRegionCode = async () => {
       try {
-        const response = await fetch("https://ipapi.co/json/");
+        const response = await fetch("https://ipapi.co/json/", {mode: "no-cors"});
         const data = await response.json();
-
+        console.log(response);
+        console.log(data);
         return data.country_code || null;
       } catch (error) {
-        console.error("Error fetching region code:", error);
+        console.warn("Error fetching region code");
         return null;
       }
     };
