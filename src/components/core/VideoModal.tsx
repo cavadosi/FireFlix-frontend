@@ -23,10 +23,22 @@ export default function VideoModal({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" className="rounded-full gap-1.5 text-xs">
-          <Play className="size-md text-amber-500" />
-          Watch trailer
-        </Button>
+        <div>
+          <Button
+            variant="outline"
+            className="rounded-full gap-1.5 hidden sm:flex text-xs"
+          >
+            <Play className="size-md text-amber-500 " />
+            Watch trailer
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className="rounded-full flex sm:hidden text-xs"
+          >
+            <Play className="size-md text-amber-500 " />
+          </Button>
+        </div>
       </DialogTrigger>
       <DialogContent className="p-0 max-w-4xl w-full">
         <DialogHeader>
@@ -38,7 +50,7 @@ export default function VideoModal({
             allowFullScreen
             className="absolute top-0 left-0 w-full h-full"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          ></ iframe>
+          ></iframe>
         </div>
       </DialogContent>
     </Dialog>
