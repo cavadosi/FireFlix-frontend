@@ -21,7 +21,7 @@ export default function MediaCarousel({
       <Separator />
       <h2 className="text-xl font-bold pl-6 bg-sidebar">{title}</h2>
       <Separator />
-      <Carousel className="py-2">
+      <Carousel className="py-2" opts={{ loop: true}}>
         <CarouselContent className="py-2">
           {mediaList.results.map((media) => (
             <CarouselItem
