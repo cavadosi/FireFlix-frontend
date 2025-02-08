@@ -3,6 +3,7 @@ export interface User {
   name: string;
   username: string;
   sessionId: string;
+  region?: string | null;
 }
 
 export interface ApiResponse<T> {

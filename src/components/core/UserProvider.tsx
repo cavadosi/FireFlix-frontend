@@ -7,6 +7,7 @@ import {
   GetUserList,
 } from "@/server/user";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useUserRegion } from "@/hooks/useUserRegion";
 
 const UserListEndpoints = [
   { key: "ratedMovies", url: "rated/movies" },
@@ -14,7 +15,7 @@ const UserListEndpoints = [
   { key: "watchlistMovies", url: "watchlist/movies" },
   { key: "ratedTv", url: "rated/tv" },
   { key: "favoriteTv", url: "favorite/tv" },
-  { key: "watchlistTv", url: "watchlist/tv" }
+  { key: "watchlistTv", url: "watchlist/tv" },
 ];
 
 type AuthContextProvider = {
@@ -31,18 +32,29 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const storedUser = localStorage.getItem("User");
     return storedUser ? JSON.parse(storedUser) : null;
   });
+  const { region } = useUserRegion();
 
-  const [userLists, setUserLists] = useState<UserLists>(() =>
-    Object.fromEntries(UserListEndpoints.map(({ key }) => [key, null])) as UserLists
+  const [userLists, setUserLists] = useState<UserLists>(
+    () =>
+      Object.fromEntries(
+        UserListEndpoints.map(({ key }) => [key, null])
+      ) as UserLists
   );
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
+    setUser((prevUser) => {
+      if (!prevUser) return prevUser;
+      return { ...prevUser, region };
+    });
+  }, [region]);
+
+  useEffect(() => {
     if (user) {
       localStorage.setItem("User", JSON.stringify(user));
-      fetchUserLists(user.id)
+      fetchUserLists(user.id);
     } else {
       localStorage.removeItem("User");
     }
@@ -51,11 +63,16 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const fetchUserLists = async (userId: string) => {
     try {
       const responses = await Promise.all(
-        UserListEndpoints.map(({ url }) => GetUserList(url, userId).catch(() => null))
+        UserListEndpoints.map(({ url }) =>
+          GetUserList(url, userId).catch(() => null)
+        )
       );
 
       const updatedLists = Object.fromEntries(
-        UserListEndpoints.map(({ key }, index) => [key, responses[index]?.data || null])
+        UserListEndpoints.map(({ key }, index) => [
+          key,
+          responses[index]?.data || null,
+        ])
       ) as UserLists;
       setUserLists(updatedLists);
     } catch (error) {
@@ -76,9 +93,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       const requestToken = requestTokenResponse.data;
-      const redirectUrl = encodeURIComponent(
-        window.location.origin
-      );
+      const redirectUrl = encodeURIComponent(window.location.origin);
 
       window.location.href = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=${redirectUrl}`;
     } catch (error) {
@@ -88,7 +103,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const GetUserBySessionId = async (requestToken: string) => {
     try {
-
       const sessionResponse = await GetSessionId(requestToken);
       if (sessionResponse.error || !sessionResponse.data) {
         console.error("Failed to get session ID:", sessionResponse.error);
@@ -130,7 +144,11 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = () => {
     setUser(null);
-    setUserLists(Object.fromEntries(UserListEndpoints.map(({ key }) => [key, null])) as UserLists);
+    setUserLists(
+      Object.fromEntries(
+        UserListEndpoints.map(({ key }) => [key, null])
+      ) as UserLists
+    );
   };
 
   return (
