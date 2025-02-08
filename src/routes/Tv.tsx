@@ -89,18 +89,14 @@ const Tv = () => {
     Object.keys(lists)
       .filter((q): q is TVShowQueries => q !== query)
       .forEach((q) => fetchMedia(q));
-  }, [query, lists]); // add lists to the dependency array
+  }, [query]);
 
   const loadMoreTVShows = async () => {
     try {
 
       const currentList = lists[activeQuery];
 
-      console.log(
-        `Before Load More - ${activeQuery} - page: ${currentList?.page}, total_pages: ${currentList?.total_pages}`
-      );
-
-      if (!currentList || currentList.page >= currentList.total_pages) return;
+      if (!currentList ) return;
 
       setIsLoadingMore((prev) => ({ ...prev, [activeQuery]: true }));
 
@@ -111,9 +107,6 @@ const Tv = () => {
       );
 
       if (response.status === 200 && response.data?.results) {
-        console.log(
-          `After Load More - ${activeQuery} - page: ${response.data.page}, total_pages: ${response.data.total_pages}`
-        );
         setLists((prevLists) => ({
           ...prevLists,
           [activeQuery]: {

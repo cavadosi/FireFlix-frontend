@@ -7,7 +7,6 @@ import {
   GetUserList,
 } from "@/server/user";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useUserRegion } from "@/hooks/useUserRegion";
 
 const UserListEndpoints = [
   { key: "ratedMovies", url: "rated/movies" },
@@ -32,8 +31,8 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const storedUser = localStorage.getItem("User");
     return storedUser ? JSON.parse(storedUser) : null;
   });
-  const { region } = useUserRegion();
 
+  const [region, setRegionCode] = useState<string | null>(user?.region || null);
   const [userLists, setUserLists] = useState<UserLists>(
     () =>
       Object.fromEntries(
@@ -43,6 +42,30 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+
+ 
+  useEffect(() => {
+    if (user?.region) return;
+    const getRegionCode = async () => {
+      try {
+        const response = await fetch("https://ipapi.co/json/");
+        const data = await response.json();
+        const regionCode = data.country_code || null;
+
+        if (regionCode && user) {
+          
+          setUser((prevUser) => prevUser ? { ...prevUser, region: regionCode } : prevUser);
+        }
+
+        setRegionCode(regionCode);
+      } catch (error) {
+        console.warn("Error fetching region code");
+        setRegionCode(null);
+      }
+    };
+
+    getRegionCode();
+  }, [user]); // Re-run if user object changes
 
   useEffect(() => {
     setUser((prevUser) => {
