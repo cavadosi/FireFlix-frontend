@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { ChevronsUpDown, Bookmark, Star, Heart, LogOut, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -31,8 +31,6 @@ export function NavUser() {
 
   
   const userListsCount = useMemo(() => {
-    console.log("🆕 Calculando userListsCount...", userLists?.favoriteMovies);
-    console.log(userLists);
     return {
       favorites:
       (userLists?.favoriteMovies?.total_results || 0) +
@@ -44,10 +42,6 @@ export function NavUser() {
       (userLists?.ratedMovies?.total_results || 0) +
       (userLists?.ratedTv?.total_results || 0),
     };
-  }, [userLists]);
-
-  useEffect(() => {
-    console.log("🔄 userLists ha cambiado:", userLists?.favoriteMovies);
   }, [userLists]);
   
 

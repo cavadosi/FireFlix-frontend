@@ -26,8 +26,8 @@ function App() {
               <Route path="/tv/:query" element={<Tv />}></Route>
               <Route path="/account" element={<Account />}></Route>
               <Route path="/discover" element={<Discover />}></Route>
-              <Route path="/error" element={<Error />}></Route>
               <Route path="/:mediaType/:id/details" element={<MediaDetails />}></Route>
+              <Route path="*" element={<Error />}></Route>
             </Routes>
           </Layout>
         </ThemeProvider>
