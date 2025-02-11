@@ -64,46 +64,42 @@ export function MediaWatchlistButton({
       updateUserLists({
         ...userLists,
         watchlistMovies: isMovie(media)
-          ? {
+          ? ({
               ...userLists.watchlistMovies,
               results: isWatchlistMedia
                 ? userLists.watchlistMovies?.results.filter(
                     (m): m is Movie => m.id !== media.id
                   ) || []
-                : [
-                    ...(userLists.watchlistMovies?.results || []),
-                    media,
-                  ],
+                : [...(userLists.watchlistMovies?.results || []), media],
               page: userLists.watchlistMovies?.page ?? 1,
               total_pages: userLists.watchlistMovies?.total_pages ?? 1,
-              total_results: userLists.watchlistMovies?.total_results ?? 0,
-            } as MediaList
+              total_results: isWatchlistMedia
+                ? (userLists.watchlistMovies?.total_results ?? 1) - 1
+                : (userLists.watchlistMovies?.total_results ?? 0) + 1,
+            } as MediaList)
           : userLists.watchlistMovies,
 
         watchlistTv: !isMovie(media)
-          ? {
+          ? ({
               ...userLists.watchlistTv,
               results: isWatchlistMedia
                 ? userLists.watchlistTv?.results.filter(
                     (tv): tv is TVShow => tv.id !== media.id
                   ) || []
-                : [
-                    ...(userLists.watchlistTv?.results || []),
-                    media,
-                  ],
+                : [...(userLists.watchlistTv?.results || []), media],
               page: userLists.watchlistTv?.page ?? 1,
               total_pages: userLists.watchlistTv?.total_pages ?? 1,
-              total_results: userLists.watchlistTv?.total_results ?? 0,
-            } as MediaList
+              total_results: isWatchlistMedia
+                ? (userLists.watchlistTv?.total_results ?? 1) - 1
+                : (userLists.watchlistTv?.total_results ?? 0) + 1,
+            } as MediaList)
           : userLists.watchlistTv,
       });
     }
 
     toast(
       `${isMovie(media) ? media.title : media.name} ${
-        isCurrentlyInWatchlist
-          ? "Removed from Watchlist"
-          : "Added to Watchlist"
+        isCurrentlyInWatchlist ? "Removed from Watchlist" : "Added to Watchlist"
       }`
     );
   };

@@ -32,6 +32,7 @@ export function NavUser() {
   
   const userListsCount = useMemo(() => {
     console.log("🆕 Calculando userListsCount...", userLists?.favoriteMovies);
+    console.log(userLists);
     return {
       favorites:
       (userLists?.favoriteMovies?.total_results || 0) +
