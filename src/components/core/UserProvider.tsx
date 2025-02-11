@@ -1,5 +1,5 @@
 import { User, ApiResponse, UserLists } from "@/types";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useMemo } from "react";
 import {
   GetRequestToken,
   GetSessionId,
@@ -22,6 +22,13 @@ type AuthContextProvider = {
   login: () => Promise<ApiResponse<string> | void>;
   logout: () => void;
   userLists: UserLists;
+  updateUserLists: (updatedLists: UserLists) => void;
+  favoriteMoviesSet: Set<number>;
+  favoriteTvSet: Set<number>;
+  ratedMoviesSet: Set<number>;
+  ratedTvSet: Set<number>;
+  watchlistMoviesSet: Set<number>;
+  watchlistTvSet: Set<number>;
 };
 
 const AuthContext = createContext<AuthContextProvider | undefined>(undefined);
@@ -43,7 +50,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
- 
   useEffect(() => {
     if (user?.region) return;
     const getRegionCode = async () => {
@@ -53,8 +59,9 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         const regionCode = data.country_code || null;
 
         if (regionCode && user) {
-          
-          setUser((prevUser) => prevUser ? { ...prevUser, region: regionCode } : prevUser);
+          setUser((prevUser) =>
+            prevUser ? { ...prevUser, region: regionCode } : prevUser
+          );
         }
 
         setRegionCode(regionCode);
@@ -65,7 +72,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     getRegionCode();
-  }, [user]); // Re-run if user object changes
+  }, [user]);
 
   useEffect(() => {
     setUser((prevUser) => {
@@ -90,7 +97,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
           GetUserList(url, userId).catch(() => null)
         )
       );
-
       const updatedLists = Object.fromEntries(
         UserListEndpoints.map(({ key }, index) => [
           key,
@@ -174,8 +180,50 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
+  const favoriteMoviesSet = useMemo(() => {
+    return new Set(userLists.favoriteMovies?.results.map((movie) => movie.id) || []);
+  }, [userLists.favoriteMovies]);
+
+  const favoriteTvSet = useMemo(() => {
+    return new Set(userLists.favoriteTv?.results.map((tv) => tv.id) || []);
+  }, [userLists.favoriteTv]);
+
+  const ratedMoviesSet = useMemo(() => {
+    return new Set(userLists.ratedMovies?.results.map((movie) => movie.id) || []);
+  }, [userLists.ratedMovies]);
+
+  const ratedTvSet = useMemo(() => {
+    return new Set(userLists.ratedTv?.results.map((tv) => tv.id) || []);
+  }, [userLists.ratedTv]);
+
+  const watchlistMoviesSet = useMemo(() => {
+    return new Set(userLists.watchlistMovies?.results.map((movie) => movie.id) || []);
+  }, [userLists.watchlistMovies]);
+
+  const watchlistTvSet = useMemo(() => {
+    return new Set(userLists.watchlistTv?.results.map((tv) => tv.id) || []);
+  }, [userLists.watchlistTv]);
+  
+  const updateUserLists = (updatedLists: UserLists) => {
+    setUserLists(updatedLists);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, userLists }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        userLists,
+        updateUserLists,
+        favoriteMoviesSet,
+        favoriteTvSet,
+        ratedMoviesSet,
+        ratedTvSet,
+        watchlistMoviesSet,
+        watchlistTvSet,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

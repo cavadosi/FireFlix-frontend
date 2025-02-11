@@ -103,10 +103,11 @@ export const MarkAsFavorite = async (
   mediaType: string,
   mediaId: number,
   favorite: boolean,
-  accountId: number,
-  sessionId: number
-): Promise<ApiResponse<MediaList>> => {
+  accountId: string,
+  sessionId: string
+): Promise<ApiResponse<void>> => {
   try {
+    console.log(favorite);
     const response = await fetch(
       `${baseUrl}/Account/${accountId}/mark_as_favorite/${mediaType}/${mediaId}?sessionId=${sessionId}`,
       {
@@ -114,10 +115,9 @@ export const MarkAsFavorite = async (
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(favorite),
+        body: JSON.stringify( favorite),
       }
     );
-    const data = await response.json();
 
     if (!response.ok) {
       return {
@@ -126,7 +126,7 @@ export const MarkAsFavorite = async (
       };
     }
 
-    return { status: 200, data };
+    return { status: 200 };
   } catch (error) {
     console.error("Error:", error);
     return {
@@ -139,11 +139,12 @@ export const MarkAsFavorite = async (
 export const MarkWatchlist = async (
   mediaType: string,
   mediaId: number,
-  favorite: boolean,
-  accountId: number,
-  sessionId: number
+  watchlist: boolean,
+  accountId: string,
+  sessionId: string
 ): Promise<ApiResponse<MediaList>> => {
   try {
+    console.log(watchlist);
     const response = await fetch(
       `${baseUrl}/Account/${accountId}/mark_watchlist/${mediaType}/${mediaId}?sessionId=${sessionId}`,
       {
@@ -151,10 +152,9 @@ export const MarkWatchlist = async (
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(favorite),
+        body: JSON.stringify(watchlist),
       }
     );
-    const data = await response.json();
 
     if (!response.ok) {
       return {
@@ -162,8 +162,8 @@ export const MarkWatchlist = async (
         error: `HTTP error! Status: ${response.status}`,
       };
     }
-
-    return { status: 200, data };
+    
+    return { status: 200 };
   } catch (error) {
     console.error("Error:", error);
     return {

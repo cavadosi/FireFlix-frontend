@@ -1,14 +1,5 @@
-"use client";
-
-import {
-  ChevronsUpDown,
-  Bookmark,
-  Star,
-  Heart,
-  LogOut,
-  User,
-} from "lucide-react";
-
+import { useContext, useEffect, useMemo } from "react";
+import { ChevronsUpDown, Bookmark, Star, Heart, LogOut, User } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -27,15 +18,9 @@ import {
 } from "@/components/ui/sidebar";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
 import AuthContext from "@/components/core/UserProvider";
 
 export function NavUser() {
-  const [userListsCount, setUserListsCount] = useState({
-    favorites: 0,
-    watchlist: 0,
-    rated: 0,
-  });
   const { isMobile } = useSidebar();
   const auth = useContext(AuthContext);
 
@@ -44,21 +29,26 @@ export function NavUser() {
   const login = auth?.login;
   const logout = auth?.logout;
 
-  useEffect(() => {
-    if (userLists) {
-      setUserListsCount({
-        favorites:
-          (userLists.favoriteMovies?.total_results || 0) +
-          (userLists.favoriteTv?.total_results || 0),
-        watchlist:
-          (userLists.watchlistMovies?.total_results || 0) +
-          (userLists.watchlistTv?.total_results || 0),
-        rated:
-          (userLists.ratedMovies?.total_results || 0) +
-          (userLists.ratedTv?.total_results || 0),
-      });
-    }
+  
+  const userListsCount = useMemo(() => {
+    console.log("🆕 Calculando userListsCount...", userLists?.favoriteMovies);
+    return {
+      favorites:
+      (userLists?.favoriteMovies?.total_results || 0) +
+      (userLists?.favoriteTv?.total_results || 0),
+      watchlist:
+      (userLists?.watchlistMovies?.total_results || 0) +
+      (userLists?.watchlistTv?.total_results || 0),
+      rated:
+      (userLists?.ratedMovies?.total_results || 0) +
+      (userLists?.ratedTv?.total_results || 0),
+    };
   }, [userLists]);
+
+  useEffect(() => {
+    console.log("🔄 userLists ha cambiado:", userLists?.favoriteMovies);
+  }, [userLists]);
+  
 
   return (
     <SidebarMenu>
@@ -113,17 +103,17 @@ export function NavUser() {
                 <DropdownMenuItem>
                   <Heart className="text-red-500 fill-red-500" />
                   <div className="grow">Favorites</div>
-                  <Badge variant="secondary">{userListsCount.favorites}</Badge>
+                  <Badge key={userListsCount.favorites} variant="secondary">{userListsCount.favorites}</Badge>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Bookmark className="text-cyan-500 fill-cyan-500" />
                   <div className="grow">Watchlist</div>
-                  <Badge variant="secondary">{userListsCount.watchlist}</Badge>
+                  <Badge key={userListsCount.watchlist} variant="secondary">{userListsCount.watchlist}</Badge>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Star className="text-amber-500 fill-amber-500" />
                   <div className="grow">Rated</div>
-                  <Badge variant="secondary">{userListsCount.rated}</Badge>
+                  <Badge key={userListsCount.rated} variant="secondary">{userListsCount.rated}</Badge>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />

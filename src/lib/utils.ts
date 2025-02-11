@@ -18,4 +18,6 @@ export const isValidMediaQuery = (
   return validQueries[mediaType].includes(query);
 };
 
-export const isMovie = (media: Movie | TVShow): media is Movie => "title" in media;
+export function isMovie(media: Movie | TVShow): media is Movie {
+  return (media as Movie).title !== undefined;
+}
