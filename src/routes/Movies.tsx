@@ -79,7 +79,6 @@ const Movies = () => {
         }));
       }
     };
-    console.log(query);
     fetchMedia(query);
     setActiveQuery(query);
 
@@ -119,8 +118,7 @@ const Movies = () => {
       setIsLoadingMore((prev) => ({ ...prev, [activeQuery]: false }));
     }
   };
-  // console.log(activeQuery);
-  // console.log(lists);
+
 
   return (
     <>

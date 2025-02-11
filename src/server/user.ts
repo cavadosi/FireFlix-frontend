@@ -107,7 +107,6 @@ export const MarkAsFavorite = async (
   sessionId: string
 ): Promise<ApiResponse<void>> => {
   try {
-    console.log(favorite);
     const response = await fetch(
       `${baseUrl}/Account/${accountId}/mark_as_favorite/${mediaType}/${mediaId}?sessionId=${sessionId}`,
       {
@@ -144,7 +143,6 @@ export const MarkWatchlist = async (
   sessionId: string
 ): Promise<ApiResponse<MediaList>> => {
   try {
-    console.log(watchlist);
     const response = await fetch(
       `${baseUrl}/Account/${accountId}/mark_watchlist/${mediaType}/${mediaId}?sessionId=${sessionId}`,
       {
