@@ -5,12 +5,14 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Bookmark, Heart, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { isMovie } from "@/lib/utils";
 import { useState } from "react";
 import { Skeleton } from "../ui/skeleton";
+import { MediaFavoriteButton } from "@/components/media/MediaFavoriteButton";
+import { MediaWatchlistButton } from "@/components/media/MediaWatchlistButton";
 
 export default function MediaCard({ media }: { media: Movie | TVShow }) {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -22,14 +24,15 @@ export default function MediaCard({ media }: { media: Movie | TVShow }) {
     : `https://image.tmdb.org/t/p/original/${(media as TVShow).poster_path}`;
 
   return (
-    <Link
-      to={
-        isMovie(media)
-          ? `/movie/${media.id}/details`
-          : `/tv/${media.id}/details`
-      }
-    >
-      <Card className="!p-0 col-span-1 group hover:-translate-y-1.5 cursor-pointer transition-all duration-300 flex flex-col h-full">
+    <Card className="!p-0 col-span-1 group hover:-translate-y-1.5 cursor-pointer transition-all duration-300 flex flex-col h-full">
+      <Link
+        to={
+          isMovie(media)
+            ? `/movie/${media.id}/details`
+            : `/tv/${media.id}/details`
+        }
+        className="grow"
+      >
         <CardHeader className="!p-0 relative">
           {/* Skeleton with fixed aspect ratio */}
           {!imageLoaded && (
@@ -50,33 +53,17 @@ export default function MediaCard({ media }: { media: Movie | TVShow }) {
         <CardContent className="p-2 font-semibold leading-5 flex-1">
           {isMovie(media) ? media.title : media.name}
         </CardContent>
-
-        <CardFooter className="p-2 flex items-center">
-          <div className="grow">
-            <Button
-              variant="ghost"
-              className="rounded-full p-2 gap-1.5 text-xs"
-            >
-              <Star className="size-md text-amber-500" />
-              {media.vote_average}
-            </Button>
-          </div>
-          <Button
-            variant={null}
-            size="icon"
-            className="rounded-full group/favorite"
-          >
-            <Heart className="size-md text-rose-500 group-hover/favorite:fill-rose-500" />
+      </Link>
+      <CardFooter className="p-2 flex items-center">
+        <div className="grow">
+          <Button variant="ghost" className="rounded-full p-2 gap-1.5 text-xs">
+            <Star className="size-md text-amber-500" />
+            {media.vote_average}
           </Button>
-          <Button
-            variant={null}
-            size="icon"
-            className="rounded-full group/watchlist"
-          >
-            <Bookmark className="size-md text-cyan-500 group-hover/watchlist:fill-cyan-500" />
-          </Button>
-        </CardFooter>
-      </Card>
-    </Link>
+        </div>
+        <MediaFavoriteButton media={media} variant={null} />
+        <MediaWatchlistButton media={media} variant={null} />
+      </CardFooter>
+    </Card>
   );
 }

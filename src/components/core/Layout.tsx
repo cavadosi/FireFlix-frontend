@@ -1,8 +1,6 @@
 import { AppSidebar } from "@/components/core/sidebar/AppSidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-} from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { ReactNode } from "react";
 
 interface LayoutProps {
@@ -15,7 +13,8 @@ export default function Layout({ children }: LayoutProps) {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-          {children}
+        {children}
+        <Toaster />
       </SidebarInset>
     </SidebarProvider>
   );

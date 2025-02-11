@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Star, Heart, Bookmark } from "lucide-react";
+import { Star } from "lucide-react";
 import { MediaAditionalInfo } from "@/components/media/MediaAditionalInfo";
+import { MediaFavoriteButton } from "@/components/media/MediaFavoriteButton";
 import VideoModal from "@/components/core/VideoModal";
 import type { Movie, TVShow } from "@/types";
 import { isMovie } from "@/lib/utils";
-
+import { MediaWatchlistButton } from "./MediaWatchlistButton";
 
 const MediaActions = ({ media }: { media: Movie | TVShow }) => {
   return (
@@ -23,12 +24,8 @@ const MediaActions = ({ media }: { media: Movie | TVShow }) => {
         <Star className="text-amber-500" />
         {media.vote_average}
       </Button>
-      <Button variant="outline" size="icon" className="rounded-full">
-        <Heart className="text-rose-500" />
-      </Button>
-      <Button variant="outline" size="icon" className="rounded-full">
-        <Bookmark className="text-cyan-500" />
-      </Button>
+      <MediaFavoriteButton media={media} variant="outline" />
+      <MediaWatchlistButton media={media} variant="outline"/>
       <MediaAditionalInfo media={media} />
     </div>
   );
