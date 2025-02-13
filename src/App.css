@@ -1,0 +1,26 @@
+
+
+.swiper {
+  width: 100%;
+  padding-top: 50px;
+  padding-bottom: 80px;
+}
+
+.swiper-slide {
+  background-position: center;
+  background-size: cover;
+  
+}
+
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  -webkit-box-reflect: below 2px linear-gradient(transparent, transparent, transparent, #006 );
+
+}
+/* 
+.swiper-slide img {
+  display: block;
+  width: 100%;
+  -webkit-box-reflect: below 2px linear-gradient(transparent 30%, #000 60%);
+} */
