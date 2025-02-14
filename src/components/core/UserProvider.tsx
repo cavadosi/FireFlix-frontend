@@ -25,8 +25,8 @@ type AuthContextProvider = {
   updateUserLists: (updatedLists: UserLists) => void;
   favoriteMoviesSet: Set<number>;
   favoriteTvSet: Set<number>;
-  ratedMoviesSet: Set<number>;
-  ratedTvSet: Set<number>;
+  ratedMoviesMap: Map<number, number>;
+  ratedTvMap: Map<number, number>;
   watchlistMoviesSet: Set<number>;
   watchlistTvSet: Set<number>;
 };
@@ -181,33 +181,46 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const favoriteMoviesSet = useMemo(() => {
-    return new Set(userLists.favoriteMovies?.results.map((movie) => movie.id) || []);
+    return new Set(
+      userLists.favoriteMovies?.results.map((movie) => movie.id) || []
+    );
   }, [userLists.favoriteMovies]);
 
   const favoriteTvSet = useMemo(() => {
     return new Set(userLists.favoriteTv?.results.map((tv) => tv.id) || []);
   }, [userLists.favoriteTv]);
 
-  const ratedMoviesSet = useMemo(() => {
-    return new Set(userLists.ratedMovies?.results.map((movie) => movie.id) || []);
+  const ratedMoviesMap = useMemo(() => {
+    return new Map(
+      userLists.ratedMovies?.results
+        .filter((movie) => movie.rating !== null && movie.rating !== undefined)
+        .map((movie) => [movie.id, movie.rating as number]) || []
+    );
   }, [userLists.ratedMovies]);
 
-  const ratedTvSet = useMemo(() => {
-    return new Set(userLists.ratedTv?.results.map((tv) => tv.id) || []);
+  const ratedTvMap = useMemo(() => {
+    return new Map(
+      userLists.ratedTv?.results
+        .filter((tv) => tv.rating !== null && tv.rating !== undefined)
+        .map((tv) => [tv.id, tv.rating as number]) || []
+    );
   }, [userLists.ratedTv]);
+  
 
   const watchlistMoviesSet = useMemo(() => {
-    return new Set(userLists.watchlistMovies?.results.map((movie) => movie.id) || []);
+    return new Set(
+      userLists.watchlistMovies?.results.map((movie) => movie.id) || []
+    );
   }, [userLists.watchlistMovies]);
 
   const watchlistTvSet = useMemo(() => {
     return new Set(userLists.watchlistTv?.results.map((tv) => tv.id) || []);
   }, [userLists.watchlistTv]);
-  
+
   const updateUserLists = (updatedLists: UserLists) => {
     setUserLists(updatedLists);
   };
-
+  console.log(userLists.ratedMovies);
   return (
     <AuthContext.Provider
       value={{
@@ -218,8 +231,8 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         updateUserLists,
         favoriteMoviesSet,
         favoriteTvSet,
-        ratedMoviesSet,
-        ratedTvSet,
+        ratedMoviesMap,
+        ratedTvMap,
         watchlistMoviesSet,
         watchlistTvSet,
       }}

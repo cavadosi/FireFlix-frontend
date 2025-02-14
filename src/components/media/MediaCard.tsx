@@ -13,6 +13,7 @@ import { useState } from "react";
 import { Skeleton } from "../ui/skeleton";
 import { MediaFavoriteButton } from "@/components/media/MediaFavoriteButton";
 import { MediaWatchlistButton } from "@/components/media/MediaWatchlistButton";
+import { MediaRatingButton } from "@/components/media/MediaRatingButton";
 
 export default function MediaCard({ media }: { media: Movie | TVShow }) {
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -56,10 +57,7 @@ export default function MediaCard({ media }: { media: Movie | TVShow }) {
       </Link>
       <CardFooter className="p-2 flex items-center">
         <div className="grow">
-          <Button variant="ghost" className="rounded-full p-2 gap-1.5 text-xs">
-            <Star className="size-md text-amber-500" />
-            {media.vote_average}
-          </Button>
+        <MediaRatingButton media={media} variant="ghost" />
         </div>
         <MediaFavoriteButton media={media} variant={null} />
         <MediaWatchlistButton media={media} variant={null} />
