@@ -40,6 +40,7 @@ export interface Movie {
   cast?: People[] | null;
   credits?: Credits | null;
   watchProviders?: WatchProviders | null; 
+  rating?: number | null;
 }
 
 interface TVShow {
@@ -70,6 +71,7 @@ interface TVShow {
   cast?: People[] | null;
   credits?: Credits | null;
   watchProviders?: WatchProviders | null; 
+  rating?: number | null;
 }
 
 export interface MediaList {

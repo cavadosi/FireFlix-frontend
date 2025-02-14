@@ -1,24 +1,20 @@
 import { isValidMediaQuery } from "@/lib/utils";
 import type { ApiResponse, MediaList, Movie, TVShow } from "@/types";
 
-
-
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
-const getApiBaseUrl = (mediaType: 'movie' | 'tv') => {
+const getApiBaseUrl = (mediaType: "movie" | "tv") => {
   return `${baseUrl}/${mediaType}`;
 };
 
-const fetchMediaData = async <T>(
-  url: string
-): Promise<ApiResponse<T>> => {
+const fetchMediaData = async <T>(url: string): Promise<ApiResponse<T>> => {
   try {
     const response = await fetch(url);
     const data = await response.json();
 
-    if (data && data['watch/providers']) {
-      data.watchProviders = data['watch/providers'];
-      delete data['watch/providers'];
+    if (data && data["watch/providers"]) {
+      data.watchProviders = data["watch/providers"];
+      delete data["watch/providers"];
     }
 
     if (!response.ok) {
@@ -39,7 +35,7 @@ const fetchMediaData = async <T>(
 };
 
 const GetMediaById = async (
-  mediaType: 'movie' | 'tv',
+  mediaType: "movie" | "tv",
   id: number,
   region?: string
 ): Promise<ApiResponse<Movie | TVShow>> => {
@@ -48,7 +44,7 @@ const GetMediaById = async (
 };
 
 const GetRecomendedMedia = async (
-  mediaType: 'movie' | 'tv',
+  mediaType: "movie" | "tv",
   id: number,
   page: number = 1
 ): Promise<ApiResponse<MediaList>> => {
@@ -57,7 +53,7 @@ const GetRecomendedMedia = async (
 };
 
 const GetSimilarMedia = async (
-  mediaType: 'movie' | 'tv',
+  mediaType: "movie" | "tv",
   id: number,
   page: number = 1
 ): Promise<ApiResponse<MediaList>> => {
@@ -66,10 +62,10 @@ const GetSimilarMedia = async (
 };
 
 const AddMediaRating = async (
-  mediaType: 'movie' | 'tv',
+  mediaType: "movie" | "tv",
   id: number,
   value: number,
-  sessionId: number
+  sessionId: string
 ) => {
   if (value < 0 || value > 10) {
     return {
@@ -79,10 +75,13 @@ const AddMediaRating = async (
   }
 
   const apiBaseUrl = getApiBaseUrl(mediaType);
+  console.log(`${apiBaseUrl}/${id}/rating/${value}/session_id=${sessionId}`);
   try {
     const response = await fetch(
-      `${apiBaseUrl}/${id}/rating/${value}/session_id=${sessionId}`
+      `${apiBaseUrl}/${id}/rating/${value}/session_id=${sessionId}`,
+      { method: "POST" }
     );
+    console.log(response);
 
     if (!response.ok) {
       return {
@@ -102,14 +101,15 @@ const AddMediaRating = async (
 };
 
 const DeleteMediaRating = async (
-  mediaType: 'movie' | 'tv',
+  mediaType: "movie" | "tv",
   id: number,
-  sessionId: number
+  sessionId: string
 ) => {
   const apiBaseUrl = getApiBaseUrl(mediaType);
   try {
     const response = await fetch(
-      `${apiBaseUrl}/${id}/rating/session_id=${sessionId}`
+      `${apiBaseUrl}/${id}/rating/session_id=${sessionId}`,
+      { method: "DELETE" }
     );
 
     if (!response.ok) {
@@ -130,7 +130,7 @@ const DeleteMediaRating = async (
 };
 
 const GetMediaList = async (
-  mediaType: 'movie' | 'tv',
+  mediaType: "movie" | "tv",
   query: string,
   page: number = 1
 ): Promise<ApiResponse<MediaList>> => {
