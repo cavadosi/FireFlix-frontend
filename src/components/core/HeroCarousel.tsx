@@ -1,29 +1,25 @@
-// Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
-import { useEffect, useState } from "react";
+import { Swiper as SwiperComponent, SwiperSlide } from "swiper/react";
+import { Swiper } from "swiper";
+import { useEffect, useState, useRef } from "react";
 import MediaService from "@/server/media";
 import { Link } from "react-router-dom";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/autoplay";
-
-// import required modules
-import {
-  EffectCoverflow,
-  Pagination,
-  Navigation,
-  Autoplay,
-} from "swiper/modules";
+import { EffectCoverflow, Navigation, Autoplay } from "swiper/modules";
 import { ApiResponse, MediaList } from "@/types";
 import { isMovie } from "@/lib/utils";
 import { Button } from "../ui/button";
 
-export default function App() {
-  const [slides, setSlides] = useState<MediaList | null>();
+const AUTOPLAY_DELAY = 4000; // 3 seconds
+
+export default function HeroCarousel() {
+  const [slides, setSlides] = useState<MediaList | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const swiperRef = useRef<Swiper | null>(null);
 
   useEffect(() => {
     const fetchMedia = async () => {
@@ -42,8 +38,8 @@ export default function App() {
 
   return (
     slides && (
-      <>
-        <Swiper
+      <div className="relative w-full">
+        <SwiperComponent
           effect={"coverflow"}
           grabCursor={true}
           centeredSlides={true}
@@ -58,11 +54,25 @@ export default function App() {
           loop={true}
           pagination={true}
           navigation={true}
-          autoplay={{ delay: 3000 }}
-          modules={[EffectCoverflow, Pagination, Navigation, Autoplay]}
+          autoplay={{
+            delay: AUTOPLAY_DELAY,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          modules={[EffectCoverflow, Navigation, Autoplay]}
           className="mySwiper !pb-0 md:!pb-36"
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper;
+            swiper.on("autoplayTimeLeft", (_, timeLeft, progressRatio) => {
+              setProgress((1 - progressRatio) * 100);
+            });
+            swiper.on("slideChange", () => {
+              setActiveIndex(swiper.realIndex);
+              setProgress(0); // Reset progress when slide changes
+            });
+          }}
         >
-          {slides?.results.map((slide) => (
+          {slides?.results.map((slide, index) => (
             <SwiperSlide
               key={slide.id}
               className="!max-w-xl !w-full aspect-video"
@@ -72,8 +82,22 @@ export default function App() {
                   src={`https://image.tmdb.org/t/p/original/${slide.backdrop_path}`}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute top-0 w-full bg-gradient-to-t from-transparent to-background/60  p-2 ">
-                  <Button variant="link" size="sm" className="text-lg font-bold text-secondary-foreground" asChild>
+                {index === activeIndex && (
+                  <div className="absolute top-0 left-0 w-full h-1">
+                    <div
+                      className="h-full bg-secondary "
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                )}
+
+                <div className="absolute top-0 w-full bg-gradient-to-t from-transparent to-background/60 p-2">
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="text-lg font-bold text-secondary-foreground"
+                    asChild
+                  >
                     <Link
                       to={
                         isMovie(slide)
@@ -88,8 +112,8 @@ export default function App() {
               </div>
             </SwiperSlide>
           ))}
-        </Swiper>
-      </>
+        </SwiperComponent>
+      </div>
     )
   );
 }

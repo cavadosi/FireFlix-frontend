@@ -1,12 +1,14 @@
-import SwiperTest from "@/components/core/SwiperTest";
-import { PageWrapper } from "@/components/core/PageWrapper";
+import HeroCarousel from "@/components/core/HeroCarousel";
+// import { PageWrapper } from "@/components/core/PageWrapper";
 import { PageHeader } from "@/components/core/PageHeader";
 
 const Home = () => {
   return (
     <>
-      <PageHeader />
-      <SwiperTest />
+      <PageHeader/>
+      <HeroCarousel />
+      
+      <div className="h-screen">sad</div>
     </>
   );
 };
