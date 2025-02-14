@@ -5,8 +5,6 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Star } from "lucide-react";
-import { Button } from "../ui/button";
 import { Link } from "react-router-dom";
 import { isMovie } from "@/lib/utils";
 import { useState } from "react";

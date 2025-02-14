@@ -5,7 +5,39 @@ const baseUrl = import.meta.env.VITE_API_BASE_URL;
 export const GetRequestToken = async (): Promise<ApiResponse<string>> => {
   try {
     const response = await fetch(`${baseUrl}/Account/request_token`);
-    
+
+    if (!response.ok) {
+      return {
+        status: response.status,
+        error: `HTTP error! Status: ${response.status}`,
+      };
+    }
+    const data = await response.text();
+
+    return { status: 200, data };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      status: 400,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
+
+export const GetSessionIdByLogin = async (
+  username: string,
+  password: string,
+  requestToken: string
+): Promise<ApiResponse<string>> => {
+  try {
+    const response = await fetch(`${baseUrl}/Account/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password, request_token: requestToken }),
+    });
+
     if (!response.ok) {
       return {
         status: response.status,
@@ -31,7 +63,7 @@ export const GetSessionId = async (
     const response = await fetch(
       `${baseUrl}/Account/session/new/${requestToken}`
     );
-    
+
     if (!response.ok) {
       return {
         status: response.status,
@@ -114,7 +146,7 @@ export const MarkAsFavorite = async (
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify( favorite),
+        body: JSON.stringify(favorite),
       }
     );
 
@@ -160,7 +192,7 @@ export const MarkWatchlist = async (
         error: `HTTP error! Status: ${response.status}`,
       };
     }
-    
+
     return { status: 200 };
   } catch (error) {
     console.error("Error:", error);

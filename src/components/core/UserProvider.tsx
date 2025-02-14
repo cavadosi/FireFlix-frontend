@@ -3,6 +3,7 @@ import { createContext, useEffect, useState, useMemo } from "react";
 import {
   GetRequestToken,
   GetSessionId,
+  GetSessionIdByLogin,
   GetAccountDetails,
   GetUserList,
 } from "@/server/user";
@@ -19,8 +20,12 @@ const UserListEndpoints = [
 
 type AuthContextProvider = {
   user: User | null;
-  login: () => Promise<ApiResponse<string> | void>;
-  logout: () => void;
+  Login: (
+    username: string,
+    password: string
+  ) => Promise<ApiResponse<string> | void>;
+  Signup: () => Promise<ApiResponse<string> | void>;
+  Logout: () => void;
   userLists: UserLists;
   updateUserLists: (updatedLists: UserLists) => void;
   favoriteMoviesSet: Set<number>;
@@ -109,7 +114,52 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const login = async () => {
+  const Login = async (userName: string, password: string) => {
+    try {
+      const requestTokenResponse = await GetRequestToken();
+
+      if (requestTokenResponse.error || !requestTokenResponse.data) {
+        console.error(
+          "Error getting request token:",
+          requestTokenResponse.error
+        );
+        return requestTokenResponse;
+      }
+
+      const requestToken = requestTokenResponse.data;
+
+      const sessionResponse = await GetSessionIdByLogin(
+        userName,
+        password,
+        requestToken
+      );
+
+      if (sessionResponse.error || !sessionResponse.data) {
+        console.error("Failed to get session ID:", sessionResponse.error);
+        return;
+      }
+
+      const sessionId = sessionResponse.data;
+      const userResponse = await GetAccountDetails(sessionId);
+
+      if (userResponse.error || !userResponse.data) {
+        console.error("Failed to get account details:", userResponse.error);
+        return;
+      }
+
+      const { id, name, username } = userResponse.data;
+      const userData = { id, name, username, sessionId };
+
+      setUser(userData);
+      navigate("/");
+
+      await fetchUserLists(userData.id);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
+  };
+
+  const Signup = async () => {
     try {
       const requestTokenResponse = await GetRequestToken();
 
@@ -171,7 +221,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     GetUserBySessionId(requestToken);
   }, [searchParams]);
 
-  const logout = () => {
+  const Logout = () => {
     setUser(null);
     setUserLists(
       Object.fromEntries(
@@ -205,7 +255,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         .map((tv) => [tv.id, tv.rating as number]) || []
     );
   }, [userLists.ratedTv]);
-  
 
   const watchlistMoviesSet = useMemo(() => {
     return new Set(
@@ -220,13 +269,14 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const updateUserLists = (updatedLists: UserLists) => {
     setUserLists(updatedLists);
   };
-  console.log(userLists.ratedMovies);
+
   return (
     <AuthContext.Provider
       value={{
         user,
-        login,
-        logout,
+        Login,
+        Signup,
+        Logout,
         userLists,
         updateUserLists,
         favoriteMoviesSet,
