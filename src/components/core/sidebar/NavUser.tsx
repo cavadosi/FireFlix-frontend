@@ -1,5 +1,12 @@
 import { useContext, useMemo } from "react";
-import { ChevronsUpDown, Bookmark, Star, Heart, LogOut, User } from "lucide-react";
+import {
+  ChevronsUpDown,
+  Bookmark,
+  Star,
+  Heart,
+  LogOut,
+  User,
+} from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -10,6 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -19,6 +27,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import AuthContext from "@/components/core/UserProvider";
+import { LoginForm } from "@/components/core/LoginForm";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
@@ -26,24 +35,21 @@ export function NavUser() {
 
   const user = auth?.user;
   const userLists = auth?.userLists;
-  const login = auth?.login;
-  const logout = auth?.logout;
+  const logout = auth?.Logout;
 
-  
   const userListsCount = useMemo(() => {
     return {
       favorites:
-      (userLists?.favoriteMovies?.total_results || 0) +
-      (userLists?.favoriteTv?.total_results || 0),
+        (userLists?.favoriteMovies?.total_results || 0) +
+        (userLists?.favoriteTv?.total_results || 0),
       watchlist:
-      (userLists?.watchlistMovies?.total_results || 0) +
-      (userLists?.watchlistTv?.total_results || 0),
+        (userLists?.watchlistMovies?.total_results || 0) +
+        (userLists?.watchlistTv?.total_results || 0),
       rated:
-      (userLists?.ratedMovies?.total_results || 0) +
-      (userLists?.ratedTv?.total_results || 0),
+        (userLists?.ratedMovies?.total_results || 0) +
+        (userLists?.ratedTv?.total_results || 0),
     };
   }, [userLists]);
-  
 
   return (
     <SidebarMenu>
@@ -98,17 +104,23 @@ export function NavUser() {
                 <DropdownMenuItem>
                   <Heart className="text-red-500 fill-red-500" />
                   <div className="grow">Favorites</div>
-                  <Badge key={userListsCount.favorites} variant="secondary">{userListsCount.favorites}</Badge>
+                  <Badge key={userListsCount.favorites} variant="secondary">
+                    {userListsCount.favorites}
+                  </Badge>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Bookmark className="text-cyan-500 fill-cyan-500" />
                   <div className="grow">Watchlist</div>
-                  <Badge key={userListsCount.watchlist} variant="secondary">{userListsCount.watchlist}</Badge>
+                  <Badge key={userListsCount.watchlist} variant="secondary">
+                    {userListsCount.watchlist}
+                  </Badge>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
                   <Star className="text-amber-500 fill-amber-500" />
                   <div className="grow">Rated</div>
-                  <Badge key={userListsCount.rated} variant="secondary">{userListsCount.rated}</Badge>
+                  <Badge key={userListsCount.rated} variant="secondary">
+                    {userListsCount.rated}
+                  </Badge>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
@@ -123,21 +135,25 @@ export function NavUser() {
         </SidebarMenuItem>
       ) : (
         <SidebarMenuItem>
-          <SidebarMenuButton
-            tooltip="Log In"
-            onClick={login}
-            size="lg"
-            variant="outline"
-            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-          >
-            <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
-              <User className="size-4" />
-            </div>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate font-semibold">Log in</span>
-              <span className="truncate text-xs">Verify your client</span>
-            </div>
-          </SidebarMenuButton>
+          <Dialog>
+            <DialogTrigger asChild>
+              <SidebarMenuButton
+                tooltip="Log In"
+                size="lg"
+                variant="outline"
+                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+              >
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
+                  <User className="size-4" />
+                </div>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">Log in</span>
+                  <span className="truncate text-xs">Verify your client</span>
+                </div>
+              </SidebarMenuButton>
+            </DialogTrigger>
+            <LoginForm />
+          </Dialog>
         </SidebarMenuItem>
       )}
     </SidebarMenu>

@@ -75,13 +75,12 @@ const AddMediaRating = async (
   }
 
   const apiBaseUrl = getApiBaseUrl(mediaType);
-  console.log(`${apiBaseUrl}/${id}/rating/${value}/session_id=${sessionId}`);
+
   try {
     const response = await fetch(
       `${apiBaseUrl}/${id}/rating/${value}/session_id=${sessionId}`,
       { method: "POST" }
     );
-    console.log(response);
 
     if (!response.ok) {
       return {
