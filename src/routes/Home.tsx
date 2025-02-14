@@ -1,13 +1,16 @@
-
-
-
+import HeroCarousel from "@/components/core/HeroCarousel";
+// import { PageWrapper } from "@/components/core/PageWrapper";
+import { PageHeader } from "@/components/core/PageHeader";
 
 const Home = () => {
-    return (
-        <div>
-            Home Page
-        </div>
-    )
-}
+  return (
+    <>
+      <PageHeader/>
+      <HeroCarousel />
+      
+      <div className="h-screen">sad</div>
+    </>
+  );
+};
 
-export default Home
+export default Home;
