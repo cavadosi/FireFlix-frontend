@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import AuthContext from "@/components/core/UserProvider";
 import { PageWrapper } from "@/components/core/PageWrapper";
 import { PageHeader } from "@/components/core/PageHeader";
@@ -6,14 +6,24 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { MediaListCard } from "@/components/media/MediaListCard";
 import { Link } from "react-router-dom";
 import { UserX } from "lucide-react";
+import { UserLists } from "@/types";
+
+const userListMetadata: { key: keyof UserLists; title: string; description: string }[] = [
+  { key: "ratedMovies", title: "Rated Movies", description: "Movies you have rated" },
+  { key: "favoriteMovies", title: "Favorite Movies", description: "Movies you have marked as favorites" },
+  { key: "watchlistMovies", title: "Watchlist Movies", description: "Movies you want to watch later" },
+  { key: "ratedTv", title: "Rated TV Shows", description: "TV shows you have rated" },
+  { key: "favoriteTv", title: "Favorite TV Shows", description: "TV shows you have marked as favorites" },
+  { key: "watchlistTv", title: "Watchlist TV Shows", description: "TV shows you want to watch later" },
+];
+
 
 const Account = () => {
   const auth = useContext(AuthContext);
-  //   const avatarSrc = auth?.user?.avatar
-  //     ? `https://www.themoviedb.org/t/p/w150_and_h150_face${auth.user.avatar}`
-  //     : "https://via.placeholder.com/150?text=Avatar"; // Proper fallback placeholder image
+  const userLists = auth?.userLists;
 
   return (
     <>
@@ -23,6 +33,7 @@ const Account = () => {
       <PageWrapper>
         {auth?.user ? (
           <>
+            {/* User Profile Card */}
             <Card className="flex items-center space-x-6 p-4 bg-muted rounded-lg shadow-md">
               <Avatar>
                 <AvatarImage
@@ -38,13 +49,35 @@ const Account = () => {
                 <p className="text-gray-500">{"cavadosi"}</p>
               </div>
             </Card>
+
             <Separator />
-            <Card className="w-full bg-muted">
+
+            {/* User Lists */}
+            <Card className="w-full bg-muted p-0">
               <CardHeader>
                 <CardTitle>Your Lists</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 lg:grid-cols-3"></div>
+              <Separator />
+              <CardContent className="p-2">
+                {userLists &&
+                userListMetadata.some(({ key }) => userLists[key]?.results?.length ?? 0 > 0) ? (
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
+                    {userListMetadata.map(({ key, title, description }) =>
+                      userLists[key]?.results?.length ?? 0 > 0 ? (
+                        <MediaListCard
+                          key={key}
+                          mediaList={userLists[key]!}
+                          title={title}
+                          description={description}
+                        />
+                      ) : null
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-center text-gray-500">
+                    You don’t have any saved lists.
+                  </p>
+                )}
               </CardContent>
             </Card>
           </>
@@ -57,7 +90,9 @@ const Account = () => {
             </Avatar>
             <p className="text-gray-500 text-xl">You are not logged in.</p>
             <Link to="/">
-              <Button size="lg" variant="secondary">Go Back Home</Button>
+              <Button size="lg" variant="secondary">
+                Go Back Home
+              </Button>
             </Link>
           </div>
         )}
