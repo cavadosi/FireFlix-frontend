@@ -69,6 +69,7 @@ const Account = () => {
                           mediaList={userLists[key]!}
                           title={title}
                           description={description}
+                          listKey={key}
                         />
                       ) : null
                     )}
