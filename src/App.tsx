@@ -8,6 +8,7 @@ import Account from "@/routes/Account";
 import Error from "@/routes/Error";
 import Discover from "@/routes/Discover";
 import MediaDetails from "@/routes/MediaDetails";
+import MediaListView from "./routes/MediaListView";
 
 import { ThemeProvider } from "@/components/core/ThemeProvider";
 import { UserProvider } from "@/components/core/UserProvider";
@@ -27,6 +28,7 @@ function App() {
               <Route path="/account" element={<Account />}></Route>
               <Route path="/discover" element={<Discover />}></Route>
               <Route path="/:mediaType/:id/details" element={<MediaDetails />}></Route>
+              <Route path="/lists/:listKey" element={<MediaListView />} />
               <Route path="*" element={<Error />}></Route>
             </Routes>
           </Layout>

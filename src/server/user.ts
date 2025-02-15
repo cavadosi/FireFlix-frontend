@@ -108,10 +108,11 @@ export const GetAccountDetails = async (
 
 export const GetUserList = async (
   query: string,
-  id: string
+  id: string,
+  page: number = 1 
 ): Promise<ApiResponse<MediaList>> => {
   try {
-    const response = await fetch(`${baseUrl}/Account/${id}/${query}`);
+    const response = await fetch(`${baseUrl}/Account/${id}/${query}?page=${page}`);
     const data = await response.json();
 
     if (!response.ok) {
