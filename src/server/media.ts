@@ -1,5 +1,12 @@
 import { isValidMediaQuery } from "@/lib/utils";
-import type { ApiResponse, MediaList, Movie, TVShow } from "@/types";
+import type {
+  ApiResponse,
+  DiscoverMoviesRequest,
+  DiscoverTvShowsRequest,
+  MediaList,
+  Movie,
+  TVShow,
+} from "@/types";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
@@ -161,6 +168,70 @@ const GetMediaList = async (
     };
   }
 };
+const SearchMedia = async (
+  mediaType: "movie" | "tv",
+  query: string,
+  page: number = 1
+) => {
+  const apiBaseUrl = getApiBaseUrl(mediaType);
+  const encodedQuery = encodeURIComponent(query);
+
+  try {
+    const response = await fetch(
+      `${apiBaseUrl}/search?query=${encodedQuery}&page=${page}`
+    );
+
+    if (!response.ok) {
+      return {
+        status: response.status,
+        error: `HTTP error! Status: ${response.status}`,
+      };
+    }
+
+    const data = await response.json();
+    return { status: 200, data };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      status: 400,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
+
+const DiscoverMedia = async (
+  mediaType: "movie" | "tv",
+  queryparams: DiscoverMoviesRequest | DiscoverTvShowsRequest
+) => {
+  const apiBaseUrl = getApiBaseUrl(mediaType);
+  try {
+
+    const response = await fetch(`${apiBaseUrl}/discover`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(queryparams),
+    });
+    
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        status: response.status,
+        error: `HTTP error! Status: ${response.status}`,
+      };
+    }
+
+    return { status: 200, data };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      status: 400,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
 
 export default {
   GetMediaById,
@@ -169,4 +240,6 @@ export default {
   GetMediaList,
   AddMediaRating,
   DeleteMediaRating,
+  SearchMedia,
+  DiscoverMedia,
 };
