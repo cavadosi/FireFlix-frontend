@@ -8,7 +8,7 @@ import type { ApiResponse, MediaList, TVShowQueries } from "@/types";
 import { PageWrapper } from "@/components/core/PageWrapper";
 import { PageHeader } from "@/components/core/PageHeader";
 import { SkeletonMediaCard } from "@/components/media/SkeletonMediaCard";
-import { Button } from "@/components/ui/button";
+import { Loader2, Plus } from "lucide-react";
 
 const TVShowQueryDetails: Record<
   TVShowQueries,
@@ -57,7 +57,6 @@ const Tv = () => {
 
   useEffect(() => {
     const fetchMedia = async (query: TVShowQueries, page: number = 1) => {
-
       if (lists[query] && page === 1) return;
 
       const response: ApiResponse<MediaList> = await MediaService.GetMediaList(
@@ -93,10 +92,9 @@ const Tv = () => {
 
   const loadMoreTVShows = async () => {
     try {
-
       const currentList = lists[activeQuery];
 
-      if (!currentList ) return;
+      if (!currentList) return;
 
       setIsLoadingMore((prev) => ({ ...prev, [activeQuery]: true }));
 
@@ -160,19 +158,25 @@ const Tv = () => {
                       {mediaList.results.map((media, key) => (
                         <MediaCard key={key} media={media} />
                       ))}
-                    </div>
-                    {mediaList.page && (
-                      <div className="flex justify-center mt-4">
-                        <Button
+                      {mediaList.page < mediaList.total_pages && (
+                        <button
+                          className="h-full rounded-xl min-h-40 w-full flex items-center justify-center gap-2 border p-4 text-muted bg-card hover:bg-background transition"
                           onClick={loadMoreTVShows}
                           disabled={isLoadingMore[activeQuery]}
                         >
-                          {isLoadingMore[activeQuery]
-                            ? "Loading..."
-                            : "Load More"}
-                        </Button>
-                      </div>
-                    )}
+                          {isLoadingMore[activeQuery] ? (
+                            <>
+                              <Loader2 className="w-5 h-5 animate-spin" />{" "}
+                              Loading...
+                            </>
+                          ) : (
+                            <>
+                              <Plus className="w-5 h-5" /> Load More
+                            </>
+                          )}
+                        </button>
+                      )}
+                    </div>
                   </>
                 ) : (
                   <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 w-full">
