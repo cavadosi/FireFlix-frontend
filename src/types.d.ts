@@ -39,7 +39,7 @@ export interface Movie {
   videos?: VideoResults | null;
   cast?: People[] | null;
   credits?: Credits | null;
-  watchProviders?: WatchProviders | null; 
+  watchProviders?: WatchProviders | null;
   rating?: number | null;
 }
 
@@ -70,7 +70,7 @@ interface TVShow {
   videos?: VideoResults | null;
   cast?: People[] | null;
   credits?: Credits | null;
-  watchProviders?: WatchProviders | null; 
+  watchProviders?: WatchProviders | null;
   rating?: number | null;
 }
 
@@ -140,23 +140,12 @@ export interface WatchProvider {
   provider_id: string;
   logo_path: string | null;
   provider_url: string | null;
-  [key: string] // This allows indexing with any string key
-
+  [key: string];
 }
 
 export interface WatchProviders {
   results: Record<string, WatchProvider>;
 }
-
-// export interface WatchProviderInfo {
-//   display_priority: number;
-//   logo_path: string | null;
-//   provider_id: string;
-//   provider_name: string;
-//   provider_url: string | null;
-//   [key: string] // This allows indexing with any string key
-// }
-
 
 // MediaQueryList
 
@@ -172,3 +161,79 @@ export type UserLists = {
   favoriteTv: MediaList | null;
   watchlistTv: MediaList | null;
 };
+export interface DiscoverTvShowsRequest {
+  language?: string;
+  region?: string;
+  sort_by?: string;
+  page?: number;
+  include_adult?: boolean;
+  include_null_first_air_dates?: boolean;
+  screened_theatrically?: boolean;
+  timezone?: string;
+  ["vote_average.gte"]?: number;
+  ["vote_average.lte"]?: number;
+  first_air_date_year?: number;
+  ["first_air_date.gte"]?: string;
+  ["first_air_date.lte"]?: string;
+  ["air_date.gte"]?: string;
+  ["air_date.lte"]?: string;
+  with_genres?: string;
+  with_keywords?: string;
+  with_networks?: string;
+  with_original_language?: string;
+  ["with_runtime.gte"]?: number;
+  ["with_runtime.lte"]?: number;
+  with_status?: string;
+  with_watch_monetization_types?: string;
+  with_watch_providers?: string;
+  without_companies?: string;
+  without_genres?: string;
+  without_keywords?: string;
+  without_watch_providers?: string;
+  with_type?: string;
+  with_origin_country?: string;
+  watch_region?: string;
+  with_cast?: string;
+  with_crew?: string;
+}
+
+export interface DiscoverMoviesRequest {
+  language?: string;
+  region?: string;
+  sort_by?: string;
+  page?: number;
+  include_adult?: boolean;
+  include_video?: boolean;
+  primary_release_year?: number;
+  ["primary_release_date.gte"]?: string;
+  ["primary_release_date.lte"]?: string;
+  ["release_date.gte"]?: string;
+  ["release_date.lte"]?: string;
+  ["vote_average.gte"]?: number;
+  ["vote_average.lte"]?: number;
+  ["vote_count.gte"]?: number;
+  ["vote_count.lte"]?: number;
+  with_genres?: string;
+  with_keywords?: string;
+  with_original_language?: string;
+  with_companies?: string;
+  with_people?: string;
+  ["with_runtime.gte"]?: number;
+  ["with_runtime.lte"]?: number;
+  with_watch_monetization_types?: string;
+  with_watch_providers?: string;
+  without_companies?: string;
+  without_genres?: string;
+  without_keywords?: string;
+  without_watch_providers?: string;
+  certification?: string;
+  ["certification.gte"]?: string;
+  ["certification.lte"]?: string;
+  certification_country?: string;
+  watch_region?: string;
+  with_release_type?: string;
+  year?: number;
+  with_cast?: string;
+  with_crew?: string;
+  with_origin_country?: string;
+}

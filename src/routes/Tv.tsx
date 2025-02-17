@@ -145,8 +145,8 @@ const Tv = () => {
           <div className="grid grid-cols-1">
             {Object.entries(lists).map(([key, mediaList]) => (
               <TabsContent key={key} value={key}>
-                <div className="space-y-1">
-                  <h4 className="text-sm font-medium leading-none">
+                <div className="space-y-2">
+                  <h4 className="text-xl font-medium leading-none">
                     {TVShowQueryDetails[key as TVShowQueries].label}
                   </h4>
                   <p className="text-sm text-muted-foreground">
