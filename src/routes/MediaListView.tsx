@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { MediaList, User, UserLists } from "@/types";
 import MediaCard from "@/components/media/MediaCard";
 import { SkeletonMediaCard } from "@/components/media/SkeletonMediaCard";
-import { Button } from "@/components/ui/button";
+import { Loader2, Plus } from "lucide-react";
 import { GetUserList } from "@/server/user";
 
 const userListMetadata: {
@@ -121,17 +121,25 @@ export default function MediaListView() {
               {mediaList.results.map((media, key) => (
                 <MediaCard key={key} media={media} />
               ))}
-            </div>
-            {mediaList.page < mediaList.total_pages && (
-              <div className="flex justify-center mt-4">
-                <Button
+              {mediaList.page < mediaList.total_pages && (
+                        <button
+                          className="h-full rounded-xl min-h-40 w-full flex items-center justify-center gap-2 border p-4 text-muted bg-card hover:bg-background transition"
                   onClick={() => fetchMedia(listMetadata.endpoint, user!, mediaList.page + 1)}
                   disabled={isLoadingMore}
-                >
-                  {isLoadingMore ? "Loading..." : "Load More"}
-                </Button>
-              </div>
-            )}
+                        >
+                          {isLoadingMore ? (
+                            <>
+                              <Loader2 className="w-5 h-5 animate-spin" />{" "}
+                              Loading...
+                            </>
+                          ) : (
+                            <>
+                              <Plus className="w-5 h-5" /> Load More
+                            </>
+                          )}
+                        </button>
+                      )}
+            </div>
           </>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 w-full">
