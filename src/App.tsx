@@ -10,14 +10,12 @@ import Discover from "@/routes/Discover";
 import MediaDetails from "@/routes/MediaDetails";
 import MediaListView from "./routes/MediaListView";
 
-import { ThemeProvider } from "@/components/core/ThemeProvider";
 import { UserProvider } from "@/components/core/UserProvider";
 
 function App() {
   return (
     <>
       <UserProvider>
-        <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
           <Layout>
             <Routes>
               <Route path="/" element={<Home />}></Route>
@@ -32,7 +30,6 @@ function App() {
               <Route path="*" element={<Error />}></Route>
             </Routes>
           </Layout>
-        </ThemeProvider>
       </UserProvider>
     </>
   );

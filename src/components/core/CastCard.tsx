@@ -19,7 +19,7 @@ export default function CastCard({ person }: { person: People }) {
         onLoad={handleImageLoad}
       />
       <p className="text-xs mt-4 text-center">{person.name}</p>
-      <p className="text-xs mt-2 text-center text-secondary">{person.character}</p>
+      <p className="text-xs mt-2 text-center text-muted-foreground">{person.character}</p>
     </div>
   );
 }

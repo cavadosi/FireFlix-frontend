@@ -46,7 +46,7 @@ export default function MediaCard({ media }: { media: Movie | TVShow }) {
             }`}
             onLoad={handleImageLoad}
           />
-          <div className="absolute invisible dark:visible bottom-0 w-full h-10 bg-gradient-to-b from-transparent to-card group-hover:h-4 transition-all duration-300"></div>
+          <div className="absolute bottom-0 w-full h-10 bg-gradient-to-b from-transparent to-card group-hover:h-4 transition-all duration-300"></div>
         </CardHeader>
 
         <CardContent className="p-2 font-semibold leading-5 flex-1">
