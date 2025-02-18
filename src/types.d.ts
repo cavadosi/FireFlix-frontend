@@ -2,7 +2,6 @@ export interface User {
   id: string;
   name: string;
   username: string;
-  sessionId: string;
   region?: string | null;
 }
 

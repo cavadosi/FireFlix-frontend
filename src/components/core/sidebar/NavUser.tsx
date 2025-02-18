@@ -35,7 +35,7 @@ export function NavUser() {
 
   const user = auth?.user;
   const userLists = auth?.userLists;
-  const logout = auth?.Logout;
+  const logout = auth?.logout;
 
   const userListsCount = useMemo(() => {
     return {

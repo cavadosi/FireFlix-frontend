@@ -72,7 +72,6 @@ const AddMediaRating = async (
   mediaType: "movie" | "tv",
   id: number,
   value: number,
-  sessionId: string
 ) => {
   if (value < 0 || value > 10) {
     return {
@@ -85,8 +84,8 @@ const AddMediaRating = async (
 
   try {
     const response = await fetch(
-      `${apiBaseUrl}/${id}/rating/${value}/session_id=${sessionId}`,
-      { method: "POST" }
+      `${apiBaseUrl}/${id}/rating/${value}`,
+      { method: "POST", credentials: "include" }
     );
 
     if (!response.ok) {
@@ -106,17 +105,13 @@ const AddMediaRating = async (
   }
 };
 
-const DeleteMediaRating = async (
-  mediaType: "movie" | "tv",
-  id: number,
-  sessionId: string
-) => {
+const DeleteMediaRating = async (mediaType: "movie" | "tv", id: number) => {
   const apiBaseUrl = getApiBaseUrl(mediaType);
   try {
-    const response = await fetch(
-      `${apiBaseUrl}/${id}/rating/session_id=${sessionId}`,
-      { method: "DELETE" }
-    );
+    const response = await fetch(`${apiBaseUrl}/${id}/rating`, {
+      method: "DELETE",
+      credentials: "include",
+    });
 
     if (!response.ok) {
       return {
@@ -205,7 +200,6 @@ const DiscoverMedia = async (
 ) => {
   const apiBaseUrl = getApiBaseUrl(mediaType);
   try {
-
     const response = await fetch(`${apiBaseUrl}/discover`, {
       method: "POST",
       headers: {
@@ -213,7 +207,7 @@ const DiscoverMedia = async (
       },
       body: JSON.stringify(queryparams),
     });
-    
+
     const data = await response.json();
 
     if (!response.ok) {

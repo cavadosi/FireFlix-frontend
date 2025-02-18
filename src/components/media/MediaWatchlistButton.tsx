@@ -28,6 +28,7 @@ export function MediaWatchlistButton({
 
   const isInWatchlist = (media: Movie | TVShow) => {
     if (isMovie(media)) {
+
       return watchlistMoviesSet?.has(media.id);
     }
     return watchlistTvSet?.has(media.id);
@@ -46,7 +47,6 @@ export function MediaWatchlistButton({
       media.id,
       !isCurrentlyInWatchlist,
       user.id,
-      user.sessionId
     );
 
     if (response.status !== 200) {
@@ -104,19 +104,20 @@ export function MediaWatchlistButton({
     );
   };
 
+
   return (
     <Tooltip>
       <TooltipTrigger asChild onClick={() => handleClick(media)}>
         <Button variant={variant} size="icon" className="rounded-full">
           <Bookmark
             className={
-              isWatchlistMedia ? "text-cyan-500 fill-cyan-500" : "text-cyan-500"
+              isInWatchlist(media) ? "text-cyan-500 fill-cyan-500" : "text-cyan-500"
             }
           />
         </Button>
       </TooltipTrigger>
       <TooltipContent className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground">
-        <p>{isWatchlistMedia ? "Remove from Watchlist" : "Add to Watchlist"}</p>
+        <p>{isInWatchlist(media) ? "Remove from Watchlist" : "Add to Watchlist"}</p>
       </TooltipContent>
     </Tooltip>
   );

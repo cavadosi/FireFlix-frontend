@@ -20,7 +20,6 @@ export function MediaFavoriteButton({
   variant: "outline" | null;
 }) {
   const auth = useContext(AuthContext);
-
   const favoriteMoviesSet = auth?.favoriteMoviesSet;
   const favoriteTvSet = auth?.favoriteTvSet;
   const updateUserLists = auth?.updateUserLists;
@@ -48,7 +47,6 @@ export function MediaFavoriteButton({
       media.id,
       !isCurrentlyFavorite,
       user?.id,
-      user?.sessionId
     );
 
     if (response.status !== 200) {
@@ -105,6 +103,7 @@ export function MediaFavoriteButton({
       }`
     );
   };
+
 
   return (
     <Tooltip>
