@@ -34,7 +34,7 @@ const Account = () => {
         {auth?.user ? (
           <>
             {/* User Profile Card */}
-            <Card className="flex items-center space-x-6 p-4 bg-muted rounded-lg shadow-md">
+            <Card className="flex items-center space-x-6 p-4 bg-sidebar rounded-lg shadow-md">
               <Avatar>
                 <AvatarImage
                   src="https://github.com/shadcn.png"
@@ -46,14 +46,14 @@ const Account = () => {
                 <h2 className="text-xl font-semibold capitalize">
                   {auth.user.username}
                 </h2>
-                <p className="text-gray-500">{"cavadosi"}</p>
+                <p className="text-muted-foreground">{"cavadosi"}</p>
               </div>
             </Card>
 
             <Separator />
 
             {/* User Lists */}
-            <Card className="w-full bg-muted p-0">
+            <Card className="w-full bg-sidebar p-0">
               <CardHeader>
                 <CardTitle>Your Lists</CardTitle>
               </CardHeader>
