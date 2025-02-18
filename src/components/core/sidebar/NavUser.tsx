@@ -8,6 +8,7 @@ import {
   User,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,18 +38,48 @@ export function NavUser() {
   const userLists = auth?.userLists;
   const logout = auth?.logout;
 
-  const userListsCount = useMemo(() => {
-    return {
-      favorites:
-        (userLists?.favoriteMovies?.total_results || 0) +
-        (userLists?.favoriteTv?.total_results || 0),
-      watchlist:
-        (userLists?.watchlistMovies?.total_results || 0) +
-        (userLists?.watchlistTv?.total_results || 0),
-      rated:
-        (userLists?.ratedMovies?.total_results || 0) +
-        (userLists?.ratedTv?.total_results || 0),
-    };
+  const userListsData = useMemo(() => {
+    return [
+      {
+        key: "favorites",
+        label: "Favorites",
+        icon: <Heart className="text-red-500 fill-red-500" />,
+        count: {
+          movies: userLists?.favoriteMovies?.total_results || 0,
+          tv: userLists?.favoriteTv?.total_results || 0,
+        },
+        listLink: {
+          movies: "favoriteMovies",
+          tv: "favoriteTv",
+        },
+      },
+      {
+        key: "watchlist",
+        label: "Watchlist",
+        icon: <Bookmark className="text-cyan-500 fill-cyan-500" />,
+        count: {
+          movies: userLists?.watchlistMovies?.total_results || 0,
+          tv: userLists?.watchlistTv?.total_results || 0,
+        },
+        listLink: {
+          movies: "watchlistMovies",
+          tv: "watchlistTv",
+        },
+      },
+      {
+        key: "rated",
+        label: "Rated",
+        icon: <Star className="text-amber-500 fill-amber-500" />,
+        count: {
+          movies: userLists?.ratedMovies?.total_results || 0,
+          tv: userLists?.ratedTv?.total_results || 0,
+        },
+        listLink: {
+          movies: "ratedMovies",
+          tv: "ratedTv",
+        },
+      },
+    ];
   }, [userLists]);
 
   return (
@@ -94,35 +125,46 @@ export function NavUser() {
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
                   <Link to="/account">
-                    <User className="text-zinc-500 fill-zinc-500" />
+                    <User className="text-zinc-500 " />
                     Account
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Heart className="text-red-500 fill-red-500" />
-                  <div className="grow">Favorites</div>
-                  <Badge key={userListsCount.favorites} variant="secondary">
-                    {userListsCount.favorites}
-                  </Badge>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Bookmark className="text-cyan-500 fill-cyan-500" />
-                  <div className="grow">Watchlist</div>
-                  <Badge key={userListsCount.watchlist} variant="secondary">
-                    {userListsCount.watchlist}
-                  </Badge>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Star className="text-amber-500 fill-amber-500" />
-                  <div className="grow">Rated</div>
-                  <Badge key={userListsCount.rated} variant="secondary">
-                    {userListsCount.rated}
-                  </Badge>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
+              <Tabs defaultValue="movie">
+                <TabsList className="w-full">
+                  <TabsTrigger value="movie" className="w-full">
+                    Movie
+                  </TabsTrigger>
+                  <TabsTrigger value="tv" className="w-full">
+                    Tv
+                  </TabsTrigger>
+                </TabsList>
+                <DropdownMenuGroup>
+                  <TabsContent value="movie">
+                    {userListsData.map((item) => (
+                      <Link to={`/lists/${item.listLink.movies}`} key={item.key}>
+                        <DropdownMenuItem>
+                          {item.icon}
+                          <div className="grow">{item.label}</div>
+                          <Badge variant="secondary">{item.count.movies}</Badge>
+                        </DropdownMenuItem>
+                      </Link>
+                    ))}
+                  </TabsContent>
+                  <TabsContent value="tv">
+                    {userListsData.map((item) => (
+                      <Link to={`/lists/${item.listLink.tv}`} key={item.key}>
+                        <DropdownMenuItem>
+                          {item.icon}
+                          <div className="grow">{item.label}</div>
+                          <Badge variant="secondary">{item.count.tv}</Badge>
+                        </DropdownMenuItem>
+                      </Link>
+                    ))}
+                  </TabsContent>
+                </DropdownMenuGroup>
+              </Tabs>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
                 <SidebarMenuButton onMouseDown={logout}>
