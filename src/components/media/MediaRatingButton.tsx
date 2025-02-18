@@ -49,7 +49,6 @@ export function MediaRatingButton({
       const response = await MediaService.DeleteMediaRating(
         mediaType,
         media.id,
-        user.sessionId
       );
 
       if (response.status !== 200) {
@@ -90,7 +89,6 @@ export function MediaRatingButton({
         mediaType,
         media.id,
         newRating,
-        user.sessionId
       );
 
       if (response.status !== 200) {

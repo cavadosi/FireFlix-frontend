@@ -6,6 +6,7 @@ import {
   GetSessionIdByLogin,
   GetAccountDetails,
   GetUserList,
+  Logout,
 } from "@/server/user";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -25,7 +26,7 @@ type AuthContextProvider = {
     password: string
   ) => Promise<ApiResponse<string> | void>;
   Signup: () => Promise<ApiResponse<string> | void>;
-  Logout: () => void;
+  logout: () => Promise<ApiResponse<string> | void>;
   userLists: UserLists;
   updateUserLists: (updatedLists: UserLists) => void;
   favoriteMoviesSet: Set<number>;
@@ -39,10 +40,7 @@ type AuthContextProvider = {
 const AuthContext = createContext<AuthContextProvider | undefined>(undefined);
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(() => {
-    const storedUser = localStorage.getItem("User");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+  const [user, setUser] = useState<User | null>(null);
 
   const [region, setRegionCode] = useState<string | null>(user?.region || null);
   const [userLists, setUserLists] = useState<UserLists>(
@@ -56,7 +54,9 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!user) return;
     if (user?.region) return;
+
     const getRegionCode = async () => {
       try {
         const response = await fetch("https://ipapi.co/json/");
@@ -85,15 +85,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       return { ...prevUser, region };
     });
   }, [region]);
-
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("User", JSON.stringify(user));
-      fetchUserLists(user.id);
-    } else {
-      localStorage.removeItem("User");
-    }
-  }, [user]);
 
   const fetchUserLists = async (userId: string) => {
     try {
@@ -127,7 +118,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       const requestToken = requestTokenResponse.data;
-
       const sessionResponse = await GetSessionIdByLogin(
         userName,
         password,
@@ -140,7 +130,9 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       const sessionId = sessionResponse.data;
-      const userResponse = await GetAccountDetails(sessionId);
+      document.cookie = `session_id=${sessionId}; path=/; Secure SameSite=Lax`;
+
+      const userResponse = await GetAccountDetails();
 
       if (userResponse.error || !userResponse.data) {
         console.error("Failed to get account details:", userResponse.error);
@@ -148,10 +140,9 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       const { id, name, username } = userResponse.data;
-      const userData = { id, name, username, sessionId };
+      const userData = { id, name, username };
 
       setUser(userData);
-      navigate("/");
 
       await fetchUserLists(userData.id);
     } catch (error) {
@@ -176,7 +167,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
       window.location.href = `https://www.themoviedb.org/authenticate/${requestToken}?redirect_to=${redirectUrl}`;
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Signup error:", error);
     }
   };
 
@@ -189,7 +180,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       const sessionId = sessionResponse.data;
-      const userResponse = await GetAccountDetails(sessionId);
+      const userResponse = await GetAccountDetails();
 
       if (userResponse.error || !userResponse.data) {
         console.error("Failed to get account details:", userResponse.error);
@@ -200,11 +191,30 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       const userData = { id, name, username, sessionId };
 
       setUser(userData);
-      navigate("/");
 
       await fetchUserLists(userData.id);
     } catch (error) {
       console.error("Error getting session ID:", error);
+    }
+  };
+
+  const getUserDetails = async () => {
+    try {
+      const userResponse = await GetAccountDetails();
+
+      if (userResponse.error || !userResponse.data) {
+        console.error("Failed to get account details:", userResponse.error);
+        return;
+      }
+
+      const { id, name, username } = userResponse.data;
+      const userData = { id, name, username };
+
+      setUser(userData);
+
+      await fetchUserLists(userData.id);
+    } catch (error) {
+      console.error("Error getting user data:", error);
     }
   };
 
@@ -221,13 +231,28 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     GetUserBySessionId(requestToken);
   }, [searchParams]);
 
-  const Logout = () => {
-    setUser(null);
-    setUserLists(
-      Object.fromEntries(
-        UserListEndpoints.map(({ key }) => [key, null])
-      ) as UserLists
-    );
+  const logout = async () => {
+    console.log("LOGINPROVIDER");
+    try {
+      const response = await Logout();
+
+      if (response.status === 200) {
+        setUser(null);
+        setUserLists(
+          Object.fromEntries(
+            UserListEndpoints.map(({ key }) => [key, null])
+          ) as UserLists
+        );
+        setRegionCode(null);
+      }
+
+
+      document.cookie = "session_id=; Max-Age=0; path=/";
+
+      navigate("/");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
 
   const favoriteMoviesSet = useMemo(() => {
@@ -270,13 +295,17 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     setUserLists(updatedLists);
   };
 
+  useEffect(() => {
+    getUserDetails();
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
         user,
         Login,
         Signup,
-        Logout,
+        logout,
         userLists,
         updateUserLists,
         favoriteMoviesSet,

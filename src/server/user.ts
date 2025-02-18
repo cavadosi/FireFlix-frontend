@@ -36,6 +36,7 @@ export const GetSessionIdByLogin = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ username, password, request_token: requestToken }),
+      credentials: "include", // Add credentials here
     });
 
     if (!response.ok) {
@@ -61,7 +62,10 @@ export const GetSessionId = async (
 ): Promise<ApiResponse<string>> => {
   try {
     const response = await fetch(
-      `${baseUrl}/Account/session/new/${requestToken}`
+      `${baseUrl}/Account/session/new/${requestToken}`,
+      {
+        credentials: "include", // Add credentials here
+      }
     );
 
     if (!response.ok) {
@@ -82,11 +86,11 @@ export const GetSessionId = async (
   }
 };
 
-export const GetAccountDetails = async (
-  sessionId: string
-): Promise<ApiResponse<User>> => {
+export const GetAccountDetails = async (): Promise<ApiResponse<User>> => {
   try {
-    const response = await fetch(`${baseUrl}/Account/details/${sessionId}`);
+    const response = await fetch(`${baseUrl}/Account/details`, {
+      credentials: "include",
+    });
     const data = await response.json();
 
     if (!response.ok) {
@@ -109,10 +113,12 @@ export const GetAccountDetails = async (
 export const GetUserList = async (
   query: string,
   id: string,
-  page: number = 1 
+  page: number = 1
 ): Promise<ApiResponse<MediaList>> => {
   try {
-    const response = await fetch(`${baseUrl}/Account/${id}/${query}?page=${page}`);
+    const response = await fetch(`${baseUrl}/Account/${id}/${query}?page=${page}`, {
+      credentials: "include",
+    });
     const data = await response.json();
 
     if (!response.ok) {
@@ -137,17 +143,17 @@ export const MarkAsFavorite = async (
   mediaId: number,
   favorite: boolean,
   accountId: string,
-  sessionId: string
 ): Promise<ApiResponse<void>> => {
   try {
     const response = await fetch(
-      `${baseUrl}/Account/${accountId}/mark_as_favorite/${mediaType}/${mediaId}?sessionId=${sessionId}`,
+      `${baseUrl}/Account/${accountId}/mark_as_favorite/${mediaType}/${mediaId}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(favorite),
+        credentials: "include",
       }
     );
 
@@ -173,17 +179,17 @@ export const MarkWatchlist = async (
   mediaId: number,
   watchlist: boolean,
   accountId: string,
-  sessionId: string
 ): Promise<ApiResponse<MediaList>> => {
   try {
     const response = await fetch(
-      `${baseUrl}/Account/${accountId}/mark_watchlist/${mediaType}/${mediaId}?sessionId=${sessionId}`,
+      `${baseUrl}/Account/${accountId}/mark_watchlist/${mediaType}/${mediaId}`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(watchlist),
+        credentials: "include",
       }
     );
 
@@ -195,6 +201,34 @@ export const MarkWatchlist = async (
     }
 
     return { status: 200 };
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      status: 400,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+};
+
+export const Logout = async (): Promise<ApiResponse<string>> => {
+  try {
+    console.log("logout");
+    const response = await fetch(`${baseUrl}/Account/logout`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      return {
+        status: response.status,
+        error: `HTTP error! Status: ${response.status}`,
+      };
+    }
+
+    return { status: 200, data: "Logout succesful" };
   } catch (error) {
     console.error("Error:", error);
     return {
