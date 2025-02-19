@@ -139,8 +139,9 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
-      const { id, name, username } = userResponse.data;
-      const userData = { id, name, username };
+      const { id, name, username, avatar, iso_3166_1, iso_639_1 } =
+        userResponse.data;
+      const userData = { id, name, username, avatar, iso_3166_1, iso_639_1 };
 
       setUser(userData);
 
@@ -179,7 +180,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
-      const sessionId = sessionResponse.data;
       const userResponse = await GetAccountDetails();
 
       if (userResponse.error || !userResponse.data) {
@@ -187,8 +187,9 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
-      const { id, name, username } = userResponse.data;
-      const userData = { id, name, username, sessionId };
+      const { id, name, username, avatar, iso_3166_1, iso_639_1 } =
+        userResponse.data;
+      const userData = { id, name, username, avatar, iso_3166_1, iso_639_1 };
 
       setUser(userData);
 
@@ -207,8 +208,9 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         return;
       }
 
-      const { id, name, username } = userResponse.data;
-      const userData = { id, name, username };
+      const { id, name, username, avatar, iso_3166_1, iso_639_1 } =
+        userResponse.data;
+      const userData = { id, name, username, avatar, iso_3166_1, iso_639_1 };
 
       setUser(userData);
 
@@ -245,7 +247,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         );
         setRegionCode(null);
       }
-
 
       document.cookie = "session_id=; Max-Age=0; path=/";
 

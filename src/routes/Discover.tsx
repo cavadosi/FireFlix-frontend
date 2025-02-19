@@ -263,13 +263,13 @@ const Discover = () => {
           <Separator />
           {mediaResults ? (
             mediaResults.results.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 w-full mt-8">
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 w-full mb-4 mt-8">
                 {mediaResults.results.map((media, key) => (
                   <MediaCard key={key} media={media} />
                 ))}
                 {mediaResults.page < mediaResults.total_pages && (
                   <button
-                    className="h-full rounded-xl min-h-40 w-full flex items-center justify-center gap-2 border p-4 text-muted bg-card hover:bg-background transition"
+                    className="h-full rounded-xl min-h-40 w-full flex items-center justify-center gap-2 border p-4 text-muted bg-card hover:bg-background transition col-span-full"
                     onClick={loadMoreResults}
                     disabled={isLoadingMore}
                   >
