@@ -2,7 +2,23 @@ export interface User {
   id: string;
   name: string;
   username: string;
+  avatar: Avatar | null;
+  iso_639_1: string | null;
+  iso_3166_1: string | null;
   region?: string | null;
+}
+
+export interface Avatar {
+  tmdb: TMDB | null;
+  gravatar: GRAVATAR | null;
+}
+
+export interface TMDB {
+  avatar_path: string | null;
+}
+
+export interface GRAVATAR {
+  hash: string | null;
 }
 
 export interface ApiResponse<T> {

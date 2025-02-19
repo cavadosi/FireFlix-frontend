@@ -93,6 +93,7 @@ export const GetAccountDetails = async (): Promise<ApiResponse<User>> => {
     });
     const data = await response.json();
 
+    console.log(data);
     if (!response.ok) {
       return {
         status: response.status,

@@ -150,13 +150,13 @@ const Movies = () => {
                 <Separator className="my-4" />
                 {mediaList ? (
                   <>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 mb-4 w-full">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-4 w-full">
                       {mediaList.results.map((media, key) => (
                         <MediaCard key={key} media={media} />
                       ))}
                       {mediaList.page < mediaList.total_pages && (
                         <button
-                          className="h-full rounded-xl min-h-40 w-full flex items-center justify-center gap-2 border p-4 text-muted bg-card hover:bg-background transition"
+                          className="h-full rounded-xl min-h-40 w-full flex items-center justify-center gap-2 border p-4 text-muted bg-card hover:bg-background transition col-span-full"
                           onClick={loadMoreMovies}
                           disabled={isLoadingMore[activeQuery]}
                         >
@@ -175,7 +175,7 @@ const Movies = () => {
                     </div>
                   </>
                 ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4 mb-4 w-full">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-4 w-full">
                     {Array.from({ length: 20 }).map((_, index) => (
                       <SkeletonMediaCard key={index} />
                     ))}

@@ -92,10 +92,21 @@ export function NavUser() {
                 size="lg"
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage alt={user.name} />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <Avatar className="h-8 w-8 overflow-hidden rounded-full">
+                  <AvatarImage
+                    src={
+                      auth.user?.avatar?.tmdb?.avatar_path
+                        ? `https://image.tmdb.org/t/p/w200/${auth.user.avatar?.tmdb?.avatar_path}`
+                        : `https://secure.gravatar.com/avatar/${auth.user?.avatar?.gravatar?.hash}.jpg?s=200`
+                    }
+                    alt="user avatar"
+                    className="h-full w-full object-cover"
+                  />
+                  <AvatarFallback>
+                    {auth.user?.name?.slice(0, 1)}
+                  </AvatarFallback>
                 </Avatar>
+
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user.name}</span>
                   <span className="truncate text-xs">{user.username}</span>
@@ -111,9 +122,19 @@ export function NavUser() {
             >
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage alt={user.name} />
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <Avatar className="h-8 w-8 overflow-hidden rounded-full">
+                    <AvatarImage
+                      src={
+                        auth.user?.avatar?.tmdb?.avatar_path
+                          ? `https://image.tmdb.org/t/p/w200/${auth.user.avatar?.tmdb?.avatar_path}`
+                          : `https://secure.gravatar.com/avatar/${auth.user?.avatar?.gravatar?.hash}.jpg?s=200`
+                      }
+                      alt="user avatar"
+                      className="h-full w-full object-cover"
+                    />
+                    <AvatarFallback>
+                      {auth.user?.name?.slice(0, 1)}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{user.name}</span>
@@ -143,7 +164,10 @@ export function NavUser() {
                 <DropdownMenuGroup>
                   <TabsContent value="movie">
                     {userListsData.map((item) => (
-                      <Link to={`/lists/${item.listLink.movies}`} key={item.key}>
+                      <Link
+                        to={`/lists/${item.listLink.movies}`}
+                        key={item.key}
+                      >
                         <DropdownMenuItem>
                           {item.icon}
                           <div className="grow">{item.label}</div>

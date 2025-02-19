@@ -25,6 +25,8 @@ const Account = () => {
   const auth = useContext(AuthContext);
   const userLists = auth?.userLists;
 
+  console.log(auth?.user);
+
   return (
     <>
       <PageHeader>
@@ -37,10 +39,10 @@ const Account = () => {
             <Card className="flex items-center space-x-6 p-4 bg-sidebar rounded-lg shadow-md">
               <Avatar>
                 <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
+                  src={auth.user.avatar?.tmdb?.avatar_path ? `https://image.tmdb.org/t/p/w200/${auth.user.avatar?.tmdb?.avatar_path}` : `https://secure.gravatar.com/avatar/${auth.user.avatar?.gravatar?.hash}.jpg?s=200`}
+                  alt="user avatar"
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>{auth.user.name.slice(0,1)}</AvatarFallback>
               </Avatar>
               <div>
                 <h2 className="text-xl font-semibold capitalize">

@@ -20,37 +20,37 @@ const userListMetadata: {
     key: "ratedMovies",
     title: "Rated Movies",
     description: "Movies you have rated",
-    endpoint: "rated/movies"
+    endpoint: "rated/movies",
   },
   {
     key: "favoriteMovies",
     title: "Favorite Movies",
     description: "Movies you have marked as favorites",
-    endpoint: "favorite/movies"
+    endpoint: "favorite/movies",
   },
   {
     key: "watchlistMovies",
     title: "Watchlist Movies",
     description: "Movies you want to watch later",
-    endpoint: "watchlist/movies"
+    endpoint: "watchlist/movies",
   },
   {
     key: "ratedTv",
     title: "Rated TV Shows",
     description: "TV shows you have rated",
-    endpoint: "rated/tv"
+    endpoint: "rated/tv",
   },
   {
     key: "favoriteTv",
     title: "Favorite TV Shows",
     description: "TV shows you have marked as favorites",
-    endpoint: "favorite/tv"
+    endpoint: "favorite/tv",
   },
   {
     key: "watchlistTv",
     title: "Watchlist TV Shows",
     description: "TV shows you want to watch later",
-    endpoint: "watchlist/tv"
+    endpoint: "watchlist/tv",
   },
 ];
 
@@ -64,7 +64,6 @@ export default function MediaListView() {
   const [mediaList, setMediaList] = useState<UserLists[keyof UserLists] | null>(
     null
   );
-
 
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
@@ -107,7 +106,6 @@ export default function MediaListView() {
     }
   }, [listKey, userLists]);
 
-
   return (
     <>
       <PageHeader>
@@ -122,23 +120,24 @@ export default function MediaListView() {
                 <MediaCard key={key} media={media} />
               ))}
               {mediaList.page < mediaList.total_pages && (
-                        <button
-                          className="h-full rounded-xl min-h-40 w-full flex items-center justify-center gap-2 border p-4 text-muted bg-card hover:bg-background transition"
-                  onClick={() => fetchMedia(listMetadata.endpoint, user!, mediaList.page + 1)}
+                <button
+                  className="h-full rounded-xl min-h-40 w-full flex items-center justify-center gap-2 border p-4 text-muted bg-card hover:bg-background transition"
+                  onClick={() =>
+                    fetchMedia(listMetadata.endpoint, user!, mediaList.page + 1)
+                  }
                   disabled={isLoadingMore}
-                        >
-                          {isLoadingMore ? (
-                            <>
-                              <Loader2 className="w-5 h-5 animate-spin" />{" "}
-                              Loading...
-                            </>
-                          ) : (
-                            <>
-                              <Plus className="w-5 h-5" /> Load More
-                            </>
-                          )}
-                        </button>
-                      )}
+                >
+                  {isLoadingMore ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" /> Loading...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-5 h-5" /> Load More
+                    </>
+                  )}
+                </button>
+              )}
             </div>
           </>
         ) : (
