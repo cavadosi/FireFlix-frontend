@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { DialogContent, DialogTitle } from "../ui/dialog";
+import { DialogContent, DialogTitle } from "@/components/ui/dialog";
 import AuthContext from "@/components/core/UserProvider";
 import { useContext, useState } from "react";
 
@@ -45,7 +45,7 @@ export function LoginForm({
           <CardHeader>
             <CardTitle className="text-2xl">Login</CardTitle>
             <CardDescription>
-              Enter your email below to login to your TMDB account
+              Enter your credentials below to login to your TMDB account
             </CardDescription>
           </CardHeader>
         </DialogTitle>

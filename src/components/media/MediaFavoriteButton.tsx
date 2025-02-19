@@ -118,7 +118,7 @@ export function MediaFavoriteButton({
           />
         </Button>
       </TooltipTrigger>
-      <TooltipContent className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground">
+      <TooltipContent className="border border-input bg-background shadow-sm text-muted-foreground cursor-default">
         <p>
           {isFavorite(media) ? "Remove from Favorites" : "Add to Favorites"}
         </p>
