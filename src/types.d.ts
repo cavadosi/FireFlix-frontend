@@ -55,6 +55,7 @@ export interface Movie {
   cast?: People[] | null;
   credits?: Credits | null;
   watchProviders?: WatchProviders | null;
+  reviews?: ReviewList | null; 
   rating?: number | null;
 }
 
@@ -86,15 +87,22 @@ interface TVShow {
   cast?: People[] | null;
   credits?: Credits | null;
   watchProviders?: WatchProviders | null;
+  reviews?: ReviewList | null;
   rating?: number | null;
 }
 
 export interface MediaList {
   page: number;
-  dates?: { maximum: number; minimum: number } | null;
   total_pages: number;
   total_results: number;
   results: Movie[] | TVShow[];
+}
+
+export interface ReviewList {
+  page: number;
+  total_pages: number;
+  total_results: number;
+  results: Review[];
 }
 
 export interface Genre {
@@ -161,6 +169,23 @@ export interface WatchProvider {
 export interface WatchProviders {
   results: Record<string, WatchProvider>;
 }
+
+export interface Review {
+  author: string;
+  author_details: AuthorDetails;
+  content: string;
+  created_at: string;
+  id: string;
+  updated_at: string;
+}
+
+export interface AuthorDetails {
+  name?: string;
+  username: string;
+  avatar_path?: string;
+  rating?: number;
+}
+
 
 // MediaQueryList
 

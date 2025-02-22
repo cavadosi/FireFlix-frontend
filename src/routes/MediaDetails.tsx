@@ -85,7 +85,7 @@ const MediaDetails = () => {
       </PageHeader>
       <MediaBackdrop media={media} />
       <MediaMainInfo media={media} />
-      <MediaContent media={media} similar={similar} recomended={recomended} />
+      <MediaContent media={media} similar={similar} recomended={recomended} reviews={media.reviews || null}/>
     </>
   );
 };
