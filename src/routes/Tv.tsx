@@ -131,7 +131,7 @@ const Tv = () => {
         onValueChange={(value) => setActiveQuery(value as TVShowQueries)}
       >
         <PageHeader isCentered>
-          <TabsList>
+          <TabsList className="max-sm:hidden">
             {Object.keys(lists).map((key) => (
               <TabsTrigger key={key} value={key}>
                 {TVShowQueryDetails[key as TVShowQueries].label}

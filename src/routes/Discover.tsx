@@ -128,7 +128,7 @@ const Discover = () => {
         value={activeTab}
         onValueChange={setActiveTab}
       >
-        <PageHeader isCentered>
+        <PageHeader>
           <TabsList>
             <TabsTrigger value="search">Search by Title</TabsTrigger>
             <TabsTrigger value="discover">Advanced search</TabsTrigger>

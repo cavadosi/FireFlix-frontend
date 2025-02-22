@@ -127,7 +127,7 @@ const Movies = () => {
         onValueChange={(value) => setActiveQuery(value as MovieQueries)}
       >
         <PageHeader isCentered>
-          <TabsList>
+          <TabsList className="max-sm:hidden">
             {Object.keys(lists).map((key) => (
               <TabsTrigger key={key} value={key}>
                 {MovieQueryDetails[key as MovieQueries].label}
