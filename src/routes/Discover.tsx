@@ -128,7 +128,7 @@ const Discover = () => {
         value={activeTab}
         onValueChange={setActiveTab}
       >
-        <PageHeader>
+        <PageHeader isCentered>
           <TabsList>
             <TabsTrigger value="search">Search by Title</TabsTrigger>
             <TabsTrigger value="discover">Advanced search</TabsTrigger>
@@ -159,7 +159,7 @@ const Discover = () => {
                         <Clapperboard className="h-2 w-2" />
                       </TooltipTrigger>
                     </ToggleGroupItem>
-                    <TooltipContent className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground">
+                    <TooltipContent className="border border-input bg-background shadow-sm hover:bg-accent text-accent-foreground">
                       <p>Movie</p>
                     </TooltipContent>
                   </Tooltip>
@@ -170,7 +170,7 @@ const Discover = () => {
                         <MonitorPlay className="h-2 w-2" />
                       </TooltipTrigger>
                     </ToggleGroupItem>
-                    <TooltipContent className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground">
+                    <TooltipContent className="border border-input bg-background shadow-sm hover:bg-accent text-accent-foreground">
                       <p>Tv</p>
                     </TooltipContent>
                   </Tooltip>
@@ -229,7 +229,7 @@ const Discover = () => {
                         <Clapperboard className="h-2 w-2" />
                       </TooltipTrigger>
                     </ToggleGroupItem>
-                    <TooltipContent className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground">
+                    <TooltipContent className="border border-input bg-background shadow-sm hover:bg-accent text-accent-foreground">
                       <p>Movie</p>
                     </TooltipContent>
                   </Tooltip>
@@ -240,7 +240,7 @@ const Discover = () => {
                         <MonitorPlay className="h-2 w-2" />
                       </TooltipTrigger>
                     </ToggleGroupItem>
-                    <TooltipContent className="border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground">
+                    <TooltipContent className="border border-input bg-background shadow-sm hover:bg-accent text-accent-foreground">
                       <p>Tv</p>
                     </TooltipContent>
                   </Tooltip>
@@ -303,7 +303,7 @@ const Discover = () => {
               </div>
             )
           ) : (
-            <div className="flex flex-col items-center justify-center py-16 text-muted-foreground">
+            <div className="flex flex-col flex-grow items-center justify-center py-16 text-muted-foreground">
               <h3 className="text-xl font-semibold mb-2">
                 Start by searching for media
               </h3>

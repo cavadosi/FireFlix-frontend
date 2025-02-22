@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react";
 import MediaService from "@/server/media";
 import type { Movie, TVShow, ApiResponse, MediaList } from "@/types";
 import { PageHeader } from "@/components/core/PageHeader";
+import { MediaAditionalInfo } from "@/components/media/MediaAditionalInfo";
 import MediaHeader from "@/components/media/MediaHeader";
 import MediaBackdrop from "@/components/media/MediaBackdrop";
 import AuthContext from "@/components/core/UserProvider";
@@ -18,8 +19,7 @@ const MediaDetails = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-
-  const user = auth?.user
+  const user = auth?.user;
 
   useEffect(() => {
     if (!mediaType || !id) {
@@ -81,11 +81,18 @@ const MediaDetails = () => {
   return (
     <>
       <PageHeader>
+        
         <MediaHeader media={media} />
+        <MediaAditionalInfo media={media} />
       </PageHeader>
       <MediaBackdrop media={media} />
       <MediaMainInfo media={media} />
-      <MediaContent media={media} similar={similar} recomended={recomended} reviews={media.reviews || null}/>
+      <MediaContent
+        media={media}
+        similar={similar}
+        recomended={recomended}
+        reviews={media.reviews || null}
+      />
     </>
   );
 };

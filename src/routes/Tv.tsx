@@ -130,7 +130,7 @@ const Tv = () => {
         className="w-full"
         onValueChange={(value) => setActiveQuery(value as TVShowQueries)}
       >
-        <PageHeader>
+        <PageHeader isCentered>
           <TabsList>
             {Object.keys(lists).map((key) => (
               <TabsTrigger key={key} value={key}>

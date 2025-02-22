@@ -15,7 +15,6 @@ const MediaContent = ({
   recomended: MediaList | null;
   reviews: ReviewList | null;
 }) => {
-  console.log(similar, recomended, reviews);
 
   return (
     <div className="grid grid-cols-1 z-10 bg-background -mt-0.5">

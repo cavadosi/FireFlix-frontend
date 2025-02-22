@@ -108,7 +108,7 @@ export default function MediaListView() {
 
   return (
     <>
-      <PageHeader>
+      <PageHeader isCentered>
         <div className="font-bold">{listMetadata?.title ?? "Media List"}</div>
       </PageHeader>
       <PageWrapper>

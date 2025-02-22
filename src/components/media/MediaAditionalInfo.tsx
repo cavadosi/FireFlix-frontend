@@ -31,7 +31,7 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
           size="icon"
           className="rounded-full group/watchlist"
         >
-          <Info className="size-md" />
+          <Info className="size-sm" />
         </Button>
       </SheetTrigger>
       <SheetContent className="overflow-y-auto max-h-screen max-w-80">
@@ -41,7 +41,7 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
           </SheetTitle>
           <Separator />
 
-          <SheetDescription>
+          <SheetDescription asChild>
             <div className="flex-col space-y-2">
               <p>{media.overview}</p>
               <Separator />

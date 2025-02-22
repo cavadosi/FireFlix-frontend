@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import { Flame } from "lucide-react";
+import { PageHeader } from "@/components/core/PageHeader";
 
 const Error = () => {
     return (
+        <>
+        <PageHeader />
         <div className="flex flex-col items-center justify-center h-screen text-white text-center">
             <Flame className="text-primary w-20 h-20 animate-bounce ease-in" />
             <h1 className="text-6xl font-bold text-primary">404</h1>
@@ -12,6 +15,7 @@ const Error = () => {
                 Ignite Your Screen Again
             </Link>
         </div>
+        </>
     );
 };
 

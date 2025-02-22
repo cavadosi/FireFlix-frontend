@@ -5,7 +5,7 @@ import { PageHeader } from "@/components/core/PageHeader";
 const Home = () => {
   return (
     <>
-      <PageHeader/>
+      <PageHeader isCentered/>
       <HeroCarousel />
       
       <div className="h-screen">sad</div>

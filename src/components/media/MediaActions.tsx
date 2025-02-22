@@ -1,4 +1,3 @@
-import { MediaAditionalInfo } from "@/components/media/MediaAditionalInfo";
 import { MediaFavoriteButton } from "@/components/media/MediaFavoriteButton";
 import { MediaWatchlistButton } from "@/components/media/MediaWatchlistButton";
 import { MediaRatingButton } from "@/components/media/MediaRatingButton";
@@ -22,7 +21,6 @@ const MediaActions = ({ media }: { media: Movie | TVShow }) => {
       <MediaRatingButton media={media} variant="outline" />
       <MediaFavoriteButton media={media} variant="outline" />
       <MediaWatchlistButton media={media} variant="outline"/>
-      <MediaAditionalInfo media={media} />
     </div>
   );
 };

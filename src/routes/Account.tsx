@@ -29,7 +29,7 @@ const Account = () => {
 
   return (
     <>
-      <PageHeader>
+      <PageHeader isCentered>
         <div className="font-bold">Account</div>
       </PageHeader>
       <PageWrapper>
