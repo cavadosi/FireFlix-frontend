@@ -33,7 +33,12 @@ export function NavMain({
     }[];
   }[];
 }) {
-  const { state } = useSidebar();
+  const { state, isMobile, setOpenMobile, openMobile } = useSidebar();
+
+  const handleClick = () => {
+    console.log(openMobile);
+    setOpenMobile(false)
+  }
 
   return (
     <SidebarGroup>
@@ -48,7 +53,7 @@ export function NavMain({
             <SidebarMenuItem>
               {item.items ? (
                 <>
-                  {state == "expanded" ? (
+                  {state == "expanded" || isMobile  ? (
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton tooltip={item.title}>
                         {item.icon && <item.icon />}
@@ -57,8 +62,8 @@ export function NavMain({
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
                   ) : (
-                    <SidebarMenuButton tooltip={item.title} asChild>
-                      <Link to={item.url}>
+                    <SidebarMenuButton tooltip={item.title} onClick={handleClick} asChild>
+                      <Link to={item.url} onClick={handleClick}>
                         {item.icon && <item.icon />}
                         <span>{item.title}</span>
                         <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -68,7 +73,7 @@ export function NavMain({
                   <CollapsibleContent>
                     <SidebarMenuSub>
                       {item.items.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.title}>
+                        <SidebarMenuSubItem key={subItem.title} onClick={handleClick}>
                           <SidebarMenuSubButton asChild>
                             <Link to={subItem.url}>
                               <span>{subItem.title}</span>
@@ -80,7 +85,7 @@ export function NavMain({
                   </CollapsibleContent>
                 </>
               ) : (
-                <SidebarMenuButton tooltip={item.title} asChild>
+                <SidebarMenuButton tooltip={item.title} onClick={handleClick} asChild>
                   <Link to={item.url}>
                     {item.icon && <item.icon />}
                     <span>{item.title}</span>

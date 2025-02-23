@@ -31,7 +31,7 @@ import AuthContext from "@/components/core/UserProvider";
 import { LoginForm } from "@/components/core/LoginForm";
 
 export function NavUser() {
-  const { isMobile } = useSidebar();
+  const { isMobile, setOpenMobile } = useSidebar();
   const auth = useContext(AuthContext);
 
   const user = auth?.user;
@@ -92,7 +92,7 @@ export function NavUser() {
                 size="lg"
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
-                <Avatar className="h-8 w-8 overflow-hidden rounded-full">
+                <Avatar className="h-6 w-6 m-1 overflow-hidden rounded-full">
                   <AvatarImage
                     src={
                       auth.user?.avatar?.tmdb?.avatar_path
@@ -145,7 +145,7 @@ export function NavUser() {
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem asChild>
-                  <Link to="/account">
+                  <Link to="/account" onMouseDown={() => setOpenMobile(false)}>
                     <User className="text-zinc-500 " />
                     Account
                   </Link>
@@ -166,6 +166,7 @@ export function NavUser() {
                     {userListsData.map((item) => (
                       <Link
                         to={`/lists/${item.listLink.movies}`}
+                        onMouseDown={() => setOpenMobile(false)}
                         key={item.key}
                       >
                         <DropdownMenuItem>
@@ -178,7 +179,11 @@ export function NavUser() {
                   </TabsContent>
                   <TabsContent value="tv">
                     {userListsData.map((item) => (
-                      <Link to={`/lists/${item.listLink.tv}`} key={item.key}>
+                      <Link
+                        to={`/lists/${item.listLink.tv}`}
+                        key={item.key}
+                        onMouseDown={() => setOpenMobile(false)}
+                      >
                         <DropdownMenuItem>
                           {item.icon}
                           <div className="grow">{item.label}</div>

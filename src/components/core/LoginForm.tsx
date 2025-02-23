@@ -24,12 +24,21 @@ export function LoginForm({
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(""); // Reset error before attempting login
+    setLoading(true);
+
     if (login) {
-      login(username, password);
+      const success = await login(username, password);
+      if (!success) {
+        setError("Invalid username or password");
+      }
     }
+    setLoading(false);
   };
 
   return (
@@ -40,10 +49,10 @@ export function LoginForm({
       )}
       {...props}
     >
-      <Card>
+      <Card className="mx-2">
         <DialogTitle>
           <CardHeader>
-            <CardTitle className="text-2xl">Login</CardTitle>
+            <CardTitle className="text-2xl">Log in</CardTitle>
             <CardDescription>
               Enter your credentials below to login to your TMDB account
             </CardDescription>
@@ -56,7 +65,7 @@ export function LoginForm({
                 <Label htmlFor="userName">Username</Label>
                 <Input
                   id="userName"
-                  type="userName"
+                  type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
@@ -80,8 +89,9 @@ export function LoginForm({
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Login
+              {error && <p className="text-red-500 text-sm">{error}</p>}
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Logging in..." : "Log in"}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

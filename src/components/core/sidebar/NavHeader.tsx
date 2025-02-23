@@ -4,6 +4,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 import { Link } from "react-router-dom";
@@ -18,6 +19,8 @@ export function NavHeader({
     url: string;
   };
 }) {
+  const { setOpenMobile } = useSidebar()
+
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -27,7 +30,7 @@ export function NavHeader({
           variant="default"
           className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
         >
-          <Link to={company.url}>
+          <Link to={company.url} onMouseDown={() => setOpenMobile(false)}>
             <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground gradient-bg">
               <company.logo className="size-4" />
             </div>

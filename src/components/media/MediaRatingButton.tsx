@@ -38,7 +38,9 @@ export function MediaRatingButton({
 
   useEffect(() => {
     setRating(getCurrentRating(media) || 0);
+    // console.log("ratingUSEEFFECT",rating, media.title as Movie, getCurrentRating(media));
   }, [ratedMoviesMap, ratedTvMap]);
+
 
   const handleRate = async (newRating: number) => {
     if (!user || !auth) return;
@@ -66,7 +68,7 @@ export function MediaRatingButton({
                 results:
                   userLists.ratedMovies?.results.filter(
                     (m) => m.id !== media.id
-                  ) || [],
+                  ),
                 total_results: (userLists.ratedMovies?.total_results ?? 1) - 1,
               } as MediaList)
             : userLists.ratedMovies,
@@ -76,7 +78,7 @@ export function MediaRatingButton({
                 results:
                   userLists.ratedTv?.results.filter(
                     (tv) => tv.id !== media.id
-                  ) || [],
+                  ),
                 total_results: (userLists.ratedTv?.total_results ?? 1) - 1,
               } as MediaList)
             : userLists.ratedTv,
@@ -143,6 +145,8 @@ export function MediaRatingButton({
       toast(`Rated ${newRating} stars!`);
     }
   };
+
+  if(media.id == 274) console.log(media.rating);
 
   return (
     <DropdownMenu>
