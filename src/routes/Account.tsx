@@ -55,7 +55,7 @@ const Account = () => {
             <Separator />
 
             {/* User Lists */}
-            <Card className="w-full bg-sidebar p-0">
+            <Card className="w-full bg-sidebar mb-4">
               <CardHeader>
                 <CardTitle>Your Lists</CardTitle>
               </CardHeader>

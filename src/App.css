@@ -13,5 +13,4 @@
 .swiper-slide img {
   display: block;
   width: 100%;
-  -webkit-box-reflect: below 2px linear-gradient(transparent, transparent, transparent, #006);
 }

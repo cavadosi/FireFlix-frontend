@@ -71,7 +71,7 @@ const GetSimilarMedia = async (
 const AddMediaRating = async (
   mediaType: "movie" | "tv",
   id: number,
-  value: number,
+  value: number
 ) => {
   if (value < 0 || value > 10) {
     return {
@@ -83,10 +83,10 @@ const AddMediaRating = async (
   const apiBaseUrl = getApiBaseUrl(mediaType);
 
   try {
-    const response = await fetch(
-      `${apiBaseUrl}/${id}/rating/${value}`,
-      { method: "POST", credentials: "include" }
-    );
+    const response = await fetch(`${apiBaseUrl}/${id}/rating/${value}`, {
+      method: "POST",
+      credentials: "include",
+    });
 
     if (!response.ok) {
       return {
@@ -199,17 +199,20 @@ const DiscoverMedia = async (
   queryparams: DiscoverMoviesRequest | DiscoverTvShowsRequest
 ) => {
   const apiBaseUrl = getApiBaseUrl(mediaType);
+  const queryString = Object.entries(queryparams)
+  .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value.toString())}`)
+  .join('&');
+  console.log("URLSTRING",queryString);
   try {
-    const response = await fetch(`${apiBaseUrl}/discover`, {
-      method: "POST",
+    const response = await fetch(`${apiBaseUrl}/discover?${queryString}`, {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(queryparams),
     });
 
+    console.log(JSON.stringify(queryparams));
     const data = await response.json();
-
+    console.log(data);
     if (!response.ok) {
       return {
         status: response.status,
