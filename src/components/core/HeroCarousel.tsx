@@ -12,6 +12,7 @@ import { EffectCoverflow, Navigation, Autoplay } from "swiper/modules";
 import { ApiResponse, MediaList } from "@/types";
 import { isMovie } from "@/lib/utils";
 import { Button } from "../ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const AUTOPLAY_DELAY = 4000;
 
@@ -39,6 +40,25 @@ export default function HeroCarousel() {
   return (
     slides && (
       <div className="relative w-full">
+        {/* Custom Navigation Buttons */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-background/60 hover:bg-background/80 p-2 rounded-full"
+          onClick={() => swiperRef.current?.slidePrev()}
+        >
+          <ChevronLeft className="w-8 h-8 text-white" />
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="icon"
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-background/60 hover:bg-background/80 p-2 rounded-full"
+          onClick={() => swiperRef.current?.slideNext()}
+        >
+          <ChevronRight className="w-8 h-8 text-white" />
+        </Button>
+
         <SwiperComponent
           effect={"coverflow"}
           grabCursor={true}
@@ -53,7 +73,7 @@ export default function HeroCarousel() {
           }}
           loop={true}
           pagination={true}
-          navigation={true}
+          navigation={false} // Disable default navigation
           autoplay={{
             delay: AUTOPLAY_DELAY,
             disableOnInteraction: false,
@@ -75,7 +95,7 @@ export default function HeroCarousel() {
           {slides?.results.map((slide, index) => (
             <SwiperSlide
               key={slide.id}
-              className="!max-w-xl !w-full aspect-video relative group"
+              className="!max-w-xl !w-full aspect-video relative group shadow-xl shadow-primary/10"
             >
               <Link
                 to={

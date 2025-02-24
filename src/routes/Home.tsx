@@ -96,7 +96,7 @@ const Home = () => {
       <HeroCarousel />
 
       <div className="grid grid-cols-1 z-10 bg-background -mt-0.5">
-        <div className="col-span-1 max-w-full mx-auto overflow-hidden mt-8">
+        <div className="col-span-1 max-w-full mx-auto overflow-hidden">
           {Object.entries(mediaLists).map(([title, media]) => (
             <MediaCarousel key={title} title={title} mediaList={media} />
           ))}
