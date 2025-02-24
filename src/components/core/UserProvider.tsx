@@ -21,6 +21,7 @@ const UserListEndpoints = [
 
 type AuthContextProvider = {
   user: User | null;
+  region: string | null;
   Login: (
     username: string,
     password: string
@@ -54,7 +55,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) return;
     if (user?.region) return;
 
     const getRegionCode = async () => {
@@ -63,7 +63,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
         const data = await response.json();
         const regionCode = data.country_code || null;
 
-        if (regionCode && user) {
+        if (regionCode) {
           setUser((prevUser) =>
             prevUser ? { ...prevUser, region: regionCode } : prevUser
           );
@@ -77,7 +77,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     getRegionCode();
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     setUser((prevUser) => {
@@ -146,6 +146,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(userData);
 
       await fetchUserLists(userData.id);
+      navigate("/account");
     } catch (error) {
       console.error("Login error:", error);
     }
@@ -234,7 +235,6 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   }, [searchParams]);
 
   const logout = async () => {
-    console.log("LOGINPROVIDER");
     try {
       const response = await Logout();
 
@@ -298,12 +298,14 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     getUserDetails();
+
   }, []);
 
   return (
     <AuthContext.Provider
       value={{
         user,
+        region,
         Login,
         Signup,
         logout,

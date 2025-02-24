@@ -37,7 +37,6 @@ const Discover = () => {
   const [mediaResults, setMediaResults] = useState<MediaList | null>(null);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
 
-  // 🔹 Handle Title-Based Search
   const handleTitleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!search.trim()) return;
@@ -48,7 +47,7 @@ const Discover = () => {
       const response = await MediaService.SearchMedia(mediatype, search);
 
       if (response.status === 200 && response.data) {
-        setMediaResults(response.data); // Update the mediaResults state
+        setMediaResults(response.data);
       }
     } catch (error) {
       console.error("Error searching media:", error);
@@ -57,7 +56,6 @@ const Discover = () => {
     }
   };
 
-  // 🔹 Handle Discover (Filtered) Search
   const handleDiscoverSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setLastFilters(filters);
@@ -69,9 +67,8 @@ const Discover = () => {
         page: filters.page ?? 1,
       });
 
-      console.log(filters.page);
       if (response.status === 200 && response.data) {
-        setMediaResults(response.data); // Update the mediaResults state
+        setMediaResults(response.data);
       }
     } catch (error) {
       console.error("Error discovering media:", error);
@@ -80,7 +77,6 @@ const Discover = () => {
     }
   };
 
-  // 🔹 Load More Results
   const loadMoreResults = async () => {
     if (
       isLoadingMore ||
@@ -215,6 +211,7 @@ const Discover = () => {
                   onValueChange={(value) => {
                     if (value === "movie" || value === "tv") {
                       setMediatype(value);
+                      setFilters({})
                     }
                   }}
                   size="sm"
@@ -263,7 +260,7 @@ const Discover = () => {
           <Separator />
           {mediaResults ? (
             mediaResults.results.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 w-full mb-4 mt-8">
+              <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 mb-4 w-full">
                 {mediaResults.results.map((media, key) => (
                   <MediaCard key={key} media={media} />
                 ))}

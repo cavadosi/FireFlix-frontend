@@ -154,7 +154,7 @@ const Tv = () => {
                 <Separator className="my-4" />
                 {mediaList ? (
                   <>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-4 w-full">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 mb-4 w-full">
                       {mediaList.results.map((media, key) => (
                         <MediaCard key={key} media={media} />
                       ))}
@@ -179,7 +179,7 @@ const Tv = () => {
                     </div>
                   </>
                 ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 mb-4 w-full">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 mb-4 w-full">
                     {Array.from({ length: 20 }).map((_, index) => (
                       <SkeletonMediaCard key={index} />
                     ))}

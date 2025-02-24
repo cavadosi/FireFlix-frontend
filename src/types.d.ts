@@ -277,3 +277,8 @@ export interface DiscoverMoviesRequest {
   with_crew?: string;
   with_origin_country?: string;
 }
+
+export type genres = {
+  movie: Genre[];
+  tv: Genre[];
+};

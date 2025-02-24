@@ -140,7 +140,7 @@ export default function HeroCarousel() {
                 </div>
 
                 {/* Hover Overlay for Overview */}
-                <div className="absolute flex items-center justify-center bg-gradient-to-t from-background/80 to-transparent p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-32">
+                <div className="absolute bottom-0 flex items-center justify-center bg-gradient-to-t from-background/80 to-transparent p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-32">
                   <p className="text-white text-sm text-center line-clamp-3">
                     {slide.overview}
                   </p>

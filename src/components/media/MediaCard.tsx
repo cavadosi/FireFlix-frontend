@@ -23,7 +23,7 @@ export default function MediaCard({ media }: { media: Movie | TVShow }) {
     : `https://image.tmdb.org/t/p/original/${(media as TVShow).poster_path}`;
 
   return (
-    <Card className="!p-0 col-span-1 group hover:-translate-y-1.5 cursor-pointer transition-all duration-300 flex flex-col h-full">
+    <Card className="!p-0 col-span-1 group hover:-translate-y-1.5 cursor-pointer transition-all duration-300 flex flex-col h-full hover:shadow-lg hover:shadow-primary/5">
       <Link
         to={
           isMovie(media)

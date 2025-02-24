@@ -156,7 +156,7 @@ export function MediaRatingButton({
             className={rating > 0 ? "text-yellow-500" : "text-muted-foreground"}
             fill={rating > 0 ? "currentColor" : "none"}
           />
-          {media.vote_average}
+          {media.vote_average.toFixed(1)}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent

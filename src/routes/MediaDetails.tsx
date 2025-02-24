@@ -21,7 +21,7 @@ const MediaDetails = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const user = auth?.user;
+  const region = auth?.region
 
   useEffect(() => {
     if (!mediaType || !id) {
@@ -35,11 +35,11 @@ const MediaDetails = () => {
         setLoading(true);
         setError(null);
 
-        const mediaResponse: ApiResponse<Movie | TVShow> = user?.region
+        const mediaResponse: ApiResponse<Movie | TVShow> = region
           ? await MediaService.GetMediaById(
               mediaType as "movie" | "tv",
               parseInt(id),
-              user.region
+              region
             )
           : await MediaService.GetMediaById(
               mediaType as "movie" | "tv",
@@ -74,7 +74,7 @@ const MediaDetails = () => {
     };
 
     fetchData();
-  }, [mediaType, id, user]);
+  }, [mediaType, id, region]);
 
   if (loading || !media) return <Loading />;
   if (error) return <Error />;
