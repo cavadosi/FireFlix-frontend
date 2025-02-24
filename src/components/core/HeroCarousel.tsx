@@ -13,7 +13,7 @@ import { ApiResponse, MediaList } from "@/types";
 import { isMovie } from "@/lib/utils";
 import { Button } from "../ui/button";
 
-const AUTOPLAY_DELAY = 4000; // 3 seconds
+const AUTOPLAY_DELAY = 4000;
 
 export default function HeroCarousel() {
   const [slides, setSlides] = useState<MediaList | null>(null);
@@ -60,7 +60,7 @@ export default function HeroCarousel() {
             pauseOnMouseEnter: true,
           }}
           modules={[EffectCoverflow, Navigation, Autoplay]}
-          className="mySwiper !pb-0 md:!pb-36"
+          className="mySwiper !pb-4"
           onSwiper={(swiper) => {
             swiperRef.current = swiper;
             swiper.on("autoplayTimeLeft", (_, timeLeft, progressRatio) => {
@@ -68,48 +68,55 @@ export default function HeroCarousel() {
             });
             swiper.on("slideChange", () => {
               setActiveIndex(swiper.realIndex);
-              setProgress(0); // Reset progress when slide changes
+              setProgress(0);
             });
           }}
         >
           {slides?.results.map((slide, index) => (
             <SwiperSlide
               key={slide.id}
-              className="!max-w-xl !w-full aspect-video"
+              className="!max-w-xl !w-full aspect-video relative group"
             >
-              <div className="relative">
-                <img
-                  src={`https://image.tmdb.org/t/p/original/${slide.backdrop_path}`}
-                  className="w-full h-full object-cover"
-                />
-                {index === activeIndex && (
-                  <div className="absolute top-0 left-0 w-full h-1">
-                    <div
-                      className="h-full bg-secondary "
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                )}
+              <Link
+                to={
+                  isMovie(slide)
+                    ? `/movie/${slide.id}/details`
+                    : `/tv/${slide.id}/details`
+                }
+              >
+                <div className="relative">
+                  <img
+                    src={`https://image.tmdb.org/t/p/original/${slide.backdrop_path}`}
+                    className="w-full h-full object-cover"
+                  />
+                  {index === activeIndex && (
+                    <div className="absolute top-0 left-0 w-full h-1">
+                      <div
+                        className="h-full bg-secondary"
+                        style={{ width: `${progress}%` }}
+                      />
+                    </div>
+                  )}
 
-                <div className="absolute top-0 w-full bg-gradient-to-t from-transparent to-background/60 p-2">
-                  <Button
-                    variant="link"
-                    size="sm"
-                    className="text-lg font-bold text-secondary-foreground"
-                    asChild
-                  >
-                    <Link
-                      to={
-                        isMovie(slide)
-                          ? `/movie/${slide.id}/details`
-                          : `/tv/${slide.id}/details`
-                      }
+                  {/* Overlay for Title */}
+                  <div className="absolute top-0 w-full bg-gradient-to-t from-transparent to-background/60 p-2 z-40 ">
+                    <Button
+                      variant="link"
+                      size="sm"
+                      className="text-lg font-bold text-secondary-foreground group-hover:underline"
                     >
                       {isMovie(slide) ? slide.title : slide.name}
-                    </Link>
-                  </Button>
+                    </Button>
+                  </div>
+
+                  {/* Hover Overlay for Overview */}
+                  <div className="absolute -bottom-2 flex items-center justify-center bg-gradient-to-t from-background/80 to-transparent p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pt-32">
+                    <p className="text-white text-sm text-center line-clamp-3">
+                      {slide.overview}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </SwiperSlide>
           ))}
         </SwiperComponent>

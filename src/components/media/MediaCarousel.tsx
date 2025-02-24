@@ -19,7 +19,7 @@ export default function MediaCarousel({
   return (
     <div className="flex flex-col">
       <Separator />
-      <h2 className="text-xl font-bold pl-6 bg-sidebar">{title}</h2>
+      <h2 className="text-xl font-bold pl-6 bg-sidebar py-2">{title}</h2>
       <Separator />
       <Carousel className="py-2" opts={{ loop: true}}>
         <CarouselContent className="py-2">
