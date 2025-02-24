@@ -4,6 +4,7 @@ import { PageHeader } from "@/components/core/PageHeader";
 import MediaService from "@/server/media";
 import { ApiResponse, MediaList } from "@/types";
 import MediaCarousel from "@/components/media/MediaCarousel";
+import Loading from "./Loading";
 
 const LISTS = [
   {
@@ -67,9 +68,11 @@ const Home = () => {
   const [mediaLists, setMediaLists] = useState<{ [key: string]: MediaList }>(
     {}
   );
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchMediaLists = async () => {
+      setLoading(true);
       const newMediaLists: { [key: string]: MediaList } = {};
 
       for (const list of LISTS) {
@@ -85,12 +88,13 @@ const Home = () => {
       }
 
       setMediaLists(newMediaLists);
+      setLoading(false);
     };
 
     fetchMediaLists();
   }, []);
 
-  return (
+  return !loading ? (
     <>
       <PageHeader isCentered />
       <HeroCarousel />
@@ -103,6 +107,8 @@ const Home = () => {
         </div>
       </div>
     </>
+  ) : (
+    <Loading />
   );
 };
 

@@ -9,6 +9,8 @@ import MediaBackdrop from "@/components/media/MediaBackdrop";
 import AuthContext from "@/components/core/UserProvider";
 import MediaMainInfo from "@/components/media/MediaMainInfo";
 import MediaContent from "@/components/media/MediaContent";
+import Loading from "./Loading";
+import Error from "./Error";
 
 const MediaDetails = () => {
   const { mediaType, id } = useParams<{ mediaType: string; id: string }>();
@@ -74,9 +76,8 @@ const MediaDetails = () => {
     fetchData();
   }, [mediaType, id, user]);
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-  if (!media) return <p>No media found.</p>;
+  if (loading || !media) return <Loading />;
+  if (error) return <Error />;
 
   return (
     <>
