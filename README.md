@@ -11,6 +11,7 @@ Powered by **The Movie Database (TMDB)**, FireFlix lets you explore a vast libra
 - **Endless Movie Discoveries**: Search through a massive collection of films, from classic masterpieces to the latest releases.
 - **Your Ratings, Your Opinion**: Rate the movies you’ve seen, and let others know what’s worth watching.
 - **Create Your Own Watchlist**: Keep track of all the movies you can’t wait to watch next — all in one place.
+- **Mark Your Favorites**: Highlight the films you love most and keep them close.
 - **In-Depth Movie Info**: Get the inside scoop with movie details, trailers, cast info, and more.
 
 Get ready to **Ignite Your Screen** with **FireFlix** — where every movie moment is just a click away. Whether you're looking to find your next movie night pick or share your thoughts on a flick, FireFlix makes it easy, fast, and fun.
