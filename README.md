@@ -15,3 +15,4 @@ Powered by **The Movie Database (TMDB)**, FireFlix lets you explore a vast libra
 - **In-Depth Movie Info**: Get the inside scoop with movie details, trailers, cast info, and more.
 
 Get ready to **Ignite Your Screen** with **FireFlix** — where every movie moment is just a click away. Whether you're looking to find your next movie night pick or share your thoughts on a flick, FireFlix makes it easy, fast, and fun.
+

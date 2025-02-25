@@ -9,7 +9,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { DiscoverMoviesRequest, DiscoverTvShowsRequest, Genre } from "@/types";
 
-
 interface AdvancedSearchFiltersProps {
   filters: DiscoverMoviesRequest | DiscoverTvShowsRequest;
   setFilters: (
@@ -60,6 +59,33 @@ const GENRES = {
   ],
 };
 
+const SORT_OPTIONS = {
+  movie: [
+    { value: "original_title.asc", label: "Original Title Asc" },
+    { value: "original_title.desc", label: "Original Title Desc" },
+    { value: "popularity.asc", label: "Popularity Asc" },
+    { value: "popularity.desc", label: "Popularity Desc" },
+    { value: "revenue.asc", label: "Revenue Asc" },
+    { value: "revenue.desc", label: "Revenue Desc" },
+    { value: "primary_release_date.asc", label: "Release Date Asc" },
+    { value: "primary_release_date.desc", label: "Release Date Desc" },
+    { value: "title.asc", label: "Title Asc" },
+    { value: "title.desc", label: "Title Desc" },
+    { value: "vote_count.asc", label: "Vote Count Asc" },
+    { value: "vote_count.desc", label: "Vote Count Desc" },
+  ],
+  tv: [
+    { value: "first_air_date.asc", label: "First Air Date Asc" },
+    { value: "first_air_date.desc", label: "First Air Date Desc" },
+    { value: "name.asc", label: "Name Asc" },
+    { value: "name.desc", label: "Name Desc" },
+    { value: "popularity.asc", label: "Popularity Asc" },
+    { value: "popularity.desc", label: "Popularity Desc" },
+    { value: "vote_count.asc", label: "Vote Count Asc" },
+    { value: "vote_count.desc", label: "Vote Count Desc" },
+  ],
+};
+
 const AdvancedSearchFilters: React.FC<AdvancedSearchFiltersProps> = ({
   filters,
   setFilters,
@@ -67,6 +93,9 @@ const AdvancedSearchFilters: React.FC<AdvancedSearchFiltersProps> = ({
 }) => {
   const isMovie = mediatype === "movie";
   const genres: Genre[] = isMovie ? GENRES.movie : GENRES.tv;
+  const sortOptions: {value: string, label:string}[] = isMovie
+    ? SORT_OPTIONS.movie
+    : SORT_OPTIONS.tv;
 
   const handleStartDateChange = (value: string) => {
     if (!value) {
@@ -110,7 +139,7 @@ const AdvancedSearchFilters: React.FC<AdvancedSearchFiltersProps> = ({
 
   const years = Array.from(
     { length: new Date().getFullYear() - 1920 + 1 },
-    (_, index) => 1920 + index
+    (_, index) => new Date().getFullYear() - index
   );
 
   return (
@@ -228,7 +257,6 @@ const AdvancedSearchFilters: React.FC<AdvancedSearchFiltersProps> = ({
           </div>
         </div>
 
-        {/* Calificación */}
         <div className="flex-1 min-w-[200px]">
           <Label>Vote Average (0-10)</Label>
           <div className="flex gap-2">
@@ -263,7 +291,6 @@ const AdvancedSearchFilters: React.FC<AdvancedSearchFiltersProps> = ({
           </div>
         </div>
 
-        {/* Ordenar por */}
         <div className="flex-1 min-w-[200px]">
           <Label>Sort By</Label>
           <Select
@@ -273,15 +300,14 @@ const AdvancedSearchFilters: React.FC<AdvancedSearchFiltersProps> = ({
             }
           >
             <SelectTrigger>
-              <SelectValue placeholder="Default" />
+              <SelectValue placeholder="Sort By" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="popularity.desc">Popularity Desc</SelectItem>
-              <SelectItem value="popularity.asc">Popularity Asc</SelectItem>
-              <SelectItem value="vote_average.desc">Highest Rated</SelectItem>
-              <SelectItem value="vote_average.asc">Lowest Rated</SelectItem>
-              <SelectItem value="release_date.desc">Newest First</SelectItem>
-              <SelectItem value="release_date.asc">Oldest First</SelectItem>
+              {sortOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
