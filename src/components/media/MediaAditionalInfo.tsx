@@ -42,7 +42,7 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
           <Separator />
 
           <SheetDescription asChild>
-            <div className="flex-col space-y-2">
+            <div className="flex-col space-y-4">
               <p>{media.overview}</p>
               <Separator />
               {isMovie(media) ? (
@@ -108,9 +108,9 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
                 </>
               )}
 
-              {providers && (
+              <Separator />
+              {providers ? (
                 <div>
-                  <Separator />
                   {Object.keys(providers).map((category, key) => {
                     const categoryProviders = providers[category];
                     return categoryProviders && categoryProviders.length > 0 ? (
@@ -132,22 +132,35 @@ export function MediaAditionalInfo({ media }: { media: Movie | TVShow }) {
                     ) : null;
                   })}
                 </div>
-              )}
-              <div>
-
-              <Separator />
-              <div className="my-4 rounded-md bg-secondary">
-                <h2 className="text-start text-lg font-semibold capitalize pt-2 px-2">
-                  Produced by
-                </h2>
-                <div className=" flex flex-wrap">
-                  {media.production_companies?.map((el) => (
-                    <CompanyCard company={el} key={el.id} />
-                  ))}
+              ) : (
+                <div className="my-4 rounded-md bg-secondary p-4 text-center text-sm ">
+                  No providers available.
                 </div>
+              )}
+
+              <div>
+                <Separator />
+                {media.production_companies &&
+                media.production_companies.length > 0 ? (
+                  <>
+                    <div className="my-4 rounded-md bg-secondary">
+                      <h2 className="text-start text-lg font-semibold capitalize pt-2 px-2">
+                        Produced by
+                      </h2>
+                      <div className=" flex flex-wrap">
+                        {media.production_companies?.map((el) => (
+                          <CompanyCard company={el} key={el.id} />
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div className="my-4 rounded-md bg-secondary p-4 text-center text-sm ">
+                    No production companies available.
+                  </div>
+                )}
               </div>
             </div>
-              </div>
           </SheetDescription>
         </SheetHeader>
       </SheetContent>
