@@ -89,7 +89,6 @@ const Discover = () => {
 
   useEffect(() => {
     if (activeTab === "discover") {
-      console.log(filters);
       discoverMedia(debouncedFilters);
     }
   }, [debouncedFilters, mediatype, activeTab]);

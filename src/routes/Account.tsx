@@ -25,8 +25,6 @@ const Account = () => {
   const auth = useContext(AuthContext);
   const userLists = auth?.userLists;
 
-  console.log(auth?.user);
-
   return (
     <>
       <PageHeader isCentered>

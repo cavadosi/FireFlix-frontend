@@ -69,8 +69,6 @@ export default function MediaListView() {
     }
   }, [listKey, userLists]);
 
-  console.log(mediaList);
-
   return (
     <>
       <PageHeader isCentered>

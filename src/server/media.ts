@@ -202,7 +202,6 @@ const DiscoverMedia = async (
   const queryString = Object.entries(queryparams)
   .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value.toString())}`)
   .join('&');
-  console.log("URLSTRING",queryString);
   try {
     const response = await fetch(`${apiBaseUrl}/discover?${queryString}`, {
       headers: {
@@ -210,9 +209,8 @@ const DiscoverMedia = async (
       },
     });
 
-    console.log(JSON.stringify(queryparams));
     const data = await response.json();
-    console.log(data);
+
     if (!response.ok) {
       return {
         status: response.status,

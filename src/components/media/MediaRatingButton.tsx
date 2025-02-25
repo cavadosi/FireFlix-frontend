@@ -38,7 +38,6 @@ export function MediaRatingButton({
 
   useEffect(() => {
     setRating(getCurrentRating(media) || 0);
-    // console.log("ratingUSEEFFECT",rating, media.title as Movie, getCurrentRating(media));
   }, [ratedMoviesMap, ratedTvMap]);
 
 
@@ -145,8 +144,6 @@ export function MediaRatingButton({
       toast(`Rated ${newRating} stars!`);
     }
   };
-
-  if(media.id == 274) console.log(media.rating);
 
   return (
     <DropdownMenu>

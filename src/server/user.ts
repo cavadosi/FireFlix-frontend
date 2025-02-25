@@ -93,7 +93,6 @@ export const GetAccountDetails = async (): Promise<ApiResponse<User>> => {
     });
     const data = await response.json();
 
-    console.log(data);
     if (!response.ok) {
       return {
         status: response.status,
@@ -213,7 +212,6 @@ export const MarkWatchlist = async (
 
 export const Logout = async (): Promise<ApiResponse<string>> => {
   try {
-    console.log("logout");
     const response = await fetch(`${baseUrl}/Account/logout`, {
       method: "DELETE",
       headers: {

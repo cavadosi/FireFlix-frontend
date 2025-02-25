@@ -33,10 +33,9 @@ export function NavMain({
     }[];
   }[];
 }) {
-  const { state, isMobile, setOpenMobile, openMobile } = useSidebar();
+  const { state, isMobile, setOpenMobile } = useSidebar();
 
   const handleClick = () => {
-    console.log(openMobile);
     setOpenMobile(false)
   }
 
