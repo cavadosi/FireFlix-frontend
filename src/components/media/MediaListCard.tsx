@@ -20,7 +20,7 @@ export function MediaListCard({
   const placeholdersNeeded = Math.max(5 - displayedMedia.length, 0);
 
   return (
-    <Card className="w-full p-2 h-full">
+    <Card className="w-full p-2 h-full hover:bg-gradient-to-r from-card from-30% hover:to-muted/20 to-50% ">
       <CardContent className="flex flex-col md:flex-row gap-2 p-2 w-full h-full">
         <div className="flex flex-row-reverse justify-end w-full overflow-clip rounded-md p-1 md:pr-6">
           {[...Array(placeholdersNeeded).fill(null), ...displayedMedia].map(
@@ -61,9 +61,9 @@ export function MediaListCard({
           )}
         </div>
 
-        <Link to={`/lists/${listKey}`} className="flex flex-col w-full grow">
+        <Link to={`/lists/${listKey}`} className="flex flex-col w-full grow group">
           <div className="flex w-full">
-            <p className="grow text-lg font-semibold hover:underline">
+            <p className="grow text-lg font-semibold group-hover:underline">
               {title}
             </p>
             <p className="text-muted-foreground">{`${totalResults} results`}</p>

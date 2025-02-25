@@ -86,7 +86,7 @@ const Discover = () => {
       searchMedia(debouncedSearch);
     }
   }, [debouncedSearch, mediatype, activeTab]);
-  
+
   useEffect(() => {
     if (activeTab === "discover") {
       console.log(filters);
@@ -141,9 +141,9 @@ const Discover = () => {
         defaultValue={activeTab}
         value={activeTab}
         onValueChange={(value) => {
-          setActiveTab(value)
-          setSearch("")
-          setFilters({})
+          setActiveTab(value);
+          setSearch("");
+          setFilters({});
         }}
       >
         <PageHeader>
@@ -152,7 +152,7 @@ const Discover = () => {
             <TabsTrigger value="discover">Advanced search</TabsTrigger>
           </TabsList>
         </PageHeader>
-        <PageWrapper>
+        <PageWrapper >
           <TabsContent value="search">
             <div className="space-y-2 w-full">
               <div className="flex gap-4 items-center">
@@ -307,6 +307,7 @@ const Discover = () => {
                 <button
                   onClick={() => {
                     setSearch("");
+                    setFilters({});
                     setMediaResults(null);
                   }}
                   className="mt-4 px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition"
