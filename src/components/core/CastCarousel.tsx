@@ -10,7 +10,7 @@ export default function CastCarousel({ cast }: { cast: People[] }) {
   if (!cast) return null;
 
   return (
-    <Carousel className="mt-2">
+    <Carousel className="py-4">
       <CarouselContent className="py-2">
         {cast.map((el) => (
           <CarouselItem
