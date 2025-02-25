@@ -1,10 +1,10 @@
+import { useState, useEffect } from "react";
 import { PageHeader } from "@/components/core/PageHeader";
 import { PageWrapper } from "@/components/core/PageWrapper";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clapperboard, MonitorPlay, Search } from "lucide-react";
-import { useState } from "react";
 import MediaCard from "@/components/media/MediaCard";
 import AdvancedSearchFilters from "@/components/core/AdvancedSearchFilters";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -20,6 +20,7 @@ import {
   DiscoverMoviesRequest,
   DiscoverTvShowsRequest,
 } from "@/types";
+import useDebounce from "@/hooks/useDebounce";
 
 const Discover = () => {
   const [search, setSearch] = useState<string>("");
@@ -37,15 +38,19 @@ const Discover = () => {
   const [mediaResults, setMediaResults] = useState<MediaList | null>(null);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
 
-  const handleTitleSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!search.trim()) return;
+  // Hook de debounce: el valor se actualizará 500ms después de que el usuario deje de escribir
+  const debouncedSearch = useDebounce(search, 500);
 
+  // Función para buscar medios por título
+  const searchMedia = async (searchTerm: string) => {
+    if (!searchTerm.trim()) {
+      setMediaResults(null);
+      return;
+    }
     setLastQuery("search");
     setLoading(true);
     try {
-      const response = await MediaService.SearchMedia(mediatype, search);
-
+      const response = await MediaService.SearchMedia(mediatype, searchTerm);
       if (response.status === 200 && response.data) {
         setMediaResults(response.data);
       }
@@ -56,6 +61,14 @@ const Discover = () => {
     }
   };
 
+  // useEffect para disparar la búsqueda cuando el valor debounced cambie
+  useEffect(() => {
+    if (activeTab === "search") {
+      searchMedia(debouncedSearch);
+    }
+  }, [debouncedSearch, mediatype, activeTab]);
+
+  // Función para la búsqueda avanzada (Discover)
   const handleDiscoverSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     setLastFilters(filters);
@@ -66,7 +79,6 @@ const Discover = () => {
         ...filters,
         page: filters.page ?? 1,
       });
-
       if (response.status === 200 && response.data) {
         setMediaResults(response.data);
       }
@@ -77,6 +89,7 @@ const Discover = () => {
     }
   };
 
+  // Función para cargar más resultados
   const loadMoreResults = async () => {
     if (
       isLoadingMore ||
@@ -122,7 +135,11 @@ const Discover = () => {
       <Tabs
         defaultValue={activeTab}
         value={activeTab}
-        onValueChange={setActiveTab}
+        onValueChange={(value) => {
+          setActiveTab(value)
+          setSearch("")
+          setFilters({})
+        }}
       >
         <PageHeader>
           <TabsList>
@@ -141,6 +158,7 @@ const Discover = () => {
                   onValueChange={(value) => {
                     if (value === "movie" || value === "tv") {
                       setMediatype(value);
+                      setMediaResults(null);
                     }
                   }}
                   size="sm"
@@ -175,27 +193,18 @@ const Discover = () => {
               <p className="text-sm text-muted-foreground pb-4">
                 Search for movies or TV shows by name
               </p>
-              <form
-                onSubmit={handleTitleSearch}
-                className="flex-col w-full space-y-4 max-w-md items-center space-x-2"
-              >
-                <div className="relative w-full">
-                  <Input
-                    type="text"
-                    placeholder="Search by title..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full rounded-lg bg-background pl-8"
-                  />
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="absolute left-2.5 top-2.5 text-muted-foreground p-0"
-                  >
-                    <Search className="h-4 w-4" />
-                  </button>
+              <div className="relative w-full">
+                <Input
+                  type="text"
+                  placeholder="Search by title..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full rounded-lg bg-background pl-8"
+                />
+                <div className="absolute left-2.5 top-2.5 text-muted-foreground p-0">
+                  <Search className="h-4 w-4" />
                 </div>
-              </form>
+              </div>
             </div>
           </TabsContent>
 
@@ -211,7 +220,8 @@ const Discover = () => {
                   onValueChange={(value) => {
                     if (value === "movie" || value === "tv") {
                       setMediatype(value);
-                      setFilters({})
+                      setFilters({});
+                      setMediaResults(null);
                     }
                   }}
                   size="sm"
@@ -246,7 +256,6 @@ const Discover = () => {
               <p className="text-sm text-muted-foreground pb-4">
                 Use filters to find movies or TV shows.
               </p>
-
               <AdvancedSearchFilters
                 filters={filters}
                 setFilters={setFilters}
@@ -258,6 +267,7 @@ const Discover = () => {
           </TabsContent>
 
           <Separator />
+
           {mediaResults ? (
             mediaResults.results.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-4 mb-4 w-full">
@@ -292,7 +302,10 @@ const Discover = () => {
                   else!
                 </p>
                 <button
-                  onClick={() => setSearch("")}
+                  onClick={() => {
+                    setSearch("");
+                    setMediaResults(null);
+                  }}
                   className="mt-4 px-6 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition"
                 >
                   Clear Search
@@ -305,7 +318,8 @@ const Discover = () => {
                 Start by searching for media
               </h3>
               <p className="text-sm text-center">
-                Enter a title use advanced search filters to discover movies or TV shows.
+                Enter a title or use advanced search filters to discover movies
+                or TV shows.
               </p>
             </div>
           )}
