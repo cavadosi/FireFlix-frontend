@@ -38,8 +38,8 @@ const Discover = () => {
   const [mediaResults, setMediaResults] = useState<MediaList | null>(null);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
 
-  const debouncedSearch = useDebounce(search, 500);
-  const debouncedFilters = useDebounce(filters, 0);
+  const debouncedSearch = useDebounce(search, 300);
+  const debouncedFilters = useDebounce(filters, 100);
 
   const searchMedia = async (searchTerm: string) => {
     if (!searchTerm.trim()) {
@@ -89,6 +89,7 @@ const Discover = () => {
   
   useEffect(() => {
     if (activeTab === "discover") {
+      console.log(filters);
       discoverMedia(debouncedFilters);
     }
   }, [debouncedFilters, mediatype, activeTab]);
