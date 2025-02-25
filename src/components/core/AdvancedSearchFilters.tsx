@@ -1,5 +1,4 @@
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -17,8 +16,6 @@ interface AdvancedSearchFiltersProps {
     filters: Partial<DiscoverMoviesRequest | DiscoverTvShowsRequest>
   ) => void;
   mediatype: "movie" | "tv";
-  loading: boolean;
-  handleDiscoverSearch: (e: React.FormEvent) => void;
 }
 
 const GENRES = {
@@ -67,8 +64,6 @@ const AdvancedSearchFilters: React.FC<AdvancedSearchFiltersProps> = ({
   filters,
   setFilters,
   mediatype,
-  loading,
-  handleDiscoverSearch,
 }) => {
   const isMovie = mediatype === "movie";
   const genres: Genre[] = isMovie ? GENRES.movie : GENRES.tv;
@@ -119,7 +114,7 @@ const AdvancedSearchFilters: React.FC<AdvancedSearchFiltersProps> = ({
   );
 
   return (
-    <form onSubmit={handleDiscoverSearch} className="space-y-4">
+    <form className="space-y-4">
       <div className="flex flex-wrap gap-4">
         {/* Géneros */}
         <div className="flex-1 min-w-[200px]">
@@ -291,11 +286,6 @@ const AdvancedSearchFilters: React.FC<AdvancedSearchFiltersProps> = ({
           </Select>
         </div>
       </div>
-
-      {/* Botón de búsqueda */}
-      <Button type="submit" disabled={loading} className="w-full">
-        {loading ? "Searching..." : "Search"}
-      </Button>
     </form>
   );
 };

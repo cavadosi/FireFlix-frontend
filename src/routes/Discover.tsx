@@ -38,10 +38,9 @@ const Discover = () => {
   const [mediaResults, setMediaResults] = useState<MediaList | null>(null);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
 
-  // Hook de debounce: el valor se actualizará 500ms después de que el usuario deje de escribir
   const debouncedSearch = useDebounce(search, 500);
+  const debouncedFilters = useDebounce(filters, 0);
 
-  // Función para buscar medios por título
   const searchMedia = async (searchTerm: string) => {
     if (!searchTerm.trim()) {
       setMediaResults(null);
@@ -61,23 +60,16 @@ const Discover = () => {
     }
   };
 
-  // useEffect para disparar la búsqueda cuando el valor debounced cambie
-  useEffect(() => {
-    if (activeTab === "search") {
-      searchMedia(debouncedSearch);
-    }
-  }, [debouncedSearch, mediatype, activeTab]);
-
-  // Función para la búsqueda avanzada (Discover)
-  const handleDiscoverSearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLastFilters(filters);
+  const discoverMedia = async (
+    filterValues: Partial<DiscoverMoviesRequest & DiscoverTvShowsRequest>
+  ) => {
+    setLastFilters(filterValues);
     setLastQuery("discover");
     setLoading(true);
     try {
       const response = await MediaService.DiscoverMedia(mediatype, {
-        ...filters,
-        page: filters.page ?? 1,
+        ...filterValues,
+        page: filterValues.page ?? 1,
       });
       if (response.status === 200 && response.data) {
         setMediaResults(response.data);
@@ -88,6 +80,18 @@ const Discover = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (activeTab === "search") {
+      searchMedia(debouncedSearch);
+    }
+  }, [debouncedSearch, mediatype, activeTab]);
+  
+  useEffect(() => {
+    if (activeTab === "discover") {
+      discoverMedia(debouncedFilters);
+    }
+  }, [debouncedFilters, mediatype, activeTab]);
 
   // Función para cargar más resultados
   const loadMoreResults = async () => {
@@ -260,8 +264,6 @@ const Discover = () => {
                 filters={filters}
                 setFilters={setFilters}
                 mediatype={mediatype}
-                loading={loading}
-                handleDiscoverSearch={handleDiscoverSearch}
               />
             </div>
           </TabsContent>
@@ -280,7 +282,7 @@ const Discover = () => {
                     onClick={loadMoreResults}
                     disabled={isLoadingMore}
                   >
-                    {isLoadingMore ? (
+                    {isLoadingMore || loading ? (
                       <>
                         <Loader2 className="w-5 h-5 animate-spin" /> Loading...
                       </>
